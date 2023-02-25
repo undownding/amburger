@@ -30,18 +30,6 @@ jobs:
     strategy:
       matrix:
         node-version: [19.x]
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: fipo
-          POSTGRES_PASSWORD: oasoo1Quip9eibeigee9eezai4pigeo8seiy0iaw
-        options: --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -53,4 +41,36 @@ jobs:
       - run: npm run lint
       - run: npm run check
       - run: npm run test
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    env:
+      MYSQL_HOST: localhost
+      MYSQL_DATABASE: amburger
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+    strategy:
+      matrix:
+        node-version: [19.x]
+    services:
+      mysql:
+        image: mysql:5.7
+      ports:
+        - 33306:3306
+    options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: cp .env.defaults .env
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check
       - run: npm run test:e2e

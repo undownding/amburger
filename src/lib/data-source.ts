@@ -7,22 +7,16 @@ import { DataSourceOptions } from 'typeorm'
 
 export function createDataSourceOptions(): DataSourceOptions {
   dotenv.config({ path: '.env' })
-  const defaultOptions: DataSourceOptions = {
-    type: 'mysql',
-    host: process.env.MYSQL_HOST,
-    port: parseInt(process.env.MYSQL_PORT),
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    migrations: [AmburgerApi.root.join('src/migration/*.entity.ts')],
-  }
   switch (process.env.NODE_ENV) {
     case 'production':
       return {
-        ...defaultOptions,
+        type: 'mysql',
         database: process.env.MYSQL_DATABASE,
-        synchronize: false,
-        logging: false,
-        migrations: [AmburgerApi.root.join('dist/migration/*.entity.js')],
+        host: process.env.MYSQL_HOST,
+        port: parseInt(process.env.MYSQL_PORT),
+        username: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        migrations: [AmburgerApi.root.join('src/migration/*.entity.ts')],
       }
     case 'test':
       return {
@@ -30,13 +24,15 @@ export function createDataSourceOptions(): DataSourceOptions {
         database: ':memory:',
         synchronize: true,
         logging: false,
+        migrations: [AmburgerApi.root.join('src/migration/*.entity.ts')],
       }
     default:
       return {
-        ...defaultOptions,
-        database: 'nexus_development',
+        type: 'sqlite',
+        database: 'dev.sqlite',
         synchronize: true,
         logging: true,
+        migrations: [AmburgerApi.root.join('src/migration/*.entity.ts')],
       }
   }
 }
