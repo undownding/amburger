@@ -6,6 +6,7 @@ import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { ConfigService } from '@nestjs/config'
+import { PasswordService } from '@/user/auth/password.service'
 
 @Injectable()
 export class UserService extends BaseCrudService<User> implements OnModuleInit {
@@ -15,8 +16,13 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     @Inject(getRepositoryToken(User))
     private readonly repository: Repository<User>,
     private readonly configService: ConfigService,
+    private readonly passwordService: PasswordService,
   ) {
     super(repository)
+  }
+
+  async getByUserName(username: string): Promise<User> {
+    return this.findOne({ where: { name: username } })
   }
 
   async onModuleInit(): Promise<void> {
@@ -27,9 +33,15 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     if (roleCount === 0 && userCount === 0) {
       const role = await this.roleService.create({ name: 'ADMIN' })
       const defaultUserName = this.configService.get('DEFAULT_USER_NAME')
+      const salt = this.passwordService.generateSalt()
       await this.create({
         name: defaultUserName,
         roles: [role],
+        salt,
+        password: await this.passwordService.hashPassword(
+          this.configService.get('DEFAULT_USER_PASSWORD'),
+          salt,
+        ),
       })
     }
   }

@@ -13,7 +13,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     optionsSuccessStatus: 204,
     credentials: true,
@@ -27,12 +27,12 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-      expectedType: Object,
-      whitelist: true,
+      // transform: true,
+      // transformOptions: {
+      //   enableImplicitConversion: true,
+      // },
+      // expectedType: Object,
+      // whitelist: true,
     }),
   )
 
@@ -43,7 +43,7 @@ async function bootstrap() {
 
 function setupSwagger(app: INestApplication): void {
   const builder = new DocumentBuilder()
-    .setTitle('正畸系统')
+    .setTitle('Amburger')
     .setDescription('后端业务 API')
     .setBasePath('api')
     .setVersion('0.0.1')

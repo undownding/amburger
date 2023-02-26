@@ -11,7 +11,7 @@ interface IToken {
 }
 
 @Injectable()
-export class AuthJwtStrategy extends PassportStrategy(Strategy) {
+export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(configService: ConfigService) {
     super({
       jwtFromRequest: AuthJwtStrategy.fromCookie,

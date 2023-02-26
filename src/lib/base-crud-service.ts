@@ -1,4 +1,9 @@
-import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm'
+import {
+  FindManyOptions,
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm'
 import { DeepPartial } from 'typeorm/common/DeepPartial'
 import { BaseEntity } from '@/lib/base-entity'
 
@@ -20,8 +25,16 @@ export class BaseCrudService<T extends BaseEntity> {
     return this.baseRepository.findByIds(ids)
   }
 
+  public async findOne(options?: FindOneOptions): Promise<T> {
+    return this.baseRepository.findOne(options)
+  }
+
   public async findAll(): Promise<T[]> {
     return this.baseRepository.find()
+  }
+
+  public async exists(options?: FindManyOptions): Promise<boolean> {
+    return this.baseRepository.exist(options)
   }
 
   public async create(data: DeepPartial<T>): Promise<T> {

@@ -6,9 +6,13 @@ import { typeOrmModuleOptions } from '@/lib/data-source'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
-import { AuthJwtStrategy } from '@/user/auth/auth-jwt.strategy'
+import { AuthJwtStrategy } from '@/user/auth/strategies/auth-jwt.strategy'
 import { JwtGuard } from '@/user/auth/auth-jwt.guard'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { AuthUsernamePasswordStrategy } from '@/user/auth/strategies/auth-username-password.strategy'
+import { LocalAuthGuard } from '@/user/auth/guards/local-auth.guard'
+import { PasswordService } from '@/user/auth/password.service'
+import { JwtModule } from '@nestjs/jwt'
 
 describe('UserService', () => {
   let service: UserService
@@ -19,13 +23,24 @@ describe('UserService', () => {
         TypeOrmModule.forRoot(typeOrmModuleOptions),
         TypeOrmModule.forFeature([User, Role]),
         ConfigModule,
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => ({
+            secret: configService.get('JWT_SECRET'),
+            signOptions: { expiresIn: '7d' },
+          }),
+        }),
       ],
       providers: [
         UserService,
         AuthService,
         RoleService,
         AuthJwtStrategy,
+        AuthUsernamePasswordStrategy,
         JwtGuard,
+        LocalAuthGuard,
+        PasswordService,
       ],
     }).compile()
 

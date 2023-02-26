@@ -15,7 +15,31 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   name: string
 
+  @Column({ default: '' })
+  nickname: string
+
+  @Column({ nullable: true })
+  avatarUrl?: string
+
+  @Column({ default: false })
+  banned: boolean
+
   @ManyToMany(() => Role, (role) => role.users, { eager: true })
   @JoinTable()
   roles: Role[]
+
+  @Column({ unique: true, nullable: true })
+  phoneCode?: string
+
+  @Column({ unique: true, nullable: true, default: '' })
+  email?: string
+
+  @Column({ default: '86' })
+  regionCode: string
+
+  @Column()
+  password: string
+
+  @Column()
+  salt: string
 }
