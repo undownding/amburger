@@ -6,15 +6,17 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { typeOrmModuleOptions } from '@/lib/data-source'
 import { ConfigModule } from '@nestjs/config'
 import { AdminModule } from './admin/admin.module'
+import { OssModule } from '@/oss/oss.module'
 
 @Module({
   imports: [
-    UserModule,
     TypeOrmModule.forRoot(typeOrmModuleOptions),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    UserModule,
     AdminModule,
+    OssModule,
   ],
   controllers: [AppController],
   providers: [AppService],
