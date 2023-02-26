@@ -7,6 +7,7 @@ import { typeOrmModuleOptions } from '@/lib/data-source'
 import { ConfigModule } from '@nestjs/config'
 import { AdminModule } from './admin/admin.module'
 import { OssModule } from '@/oss/oss.module'
+import { SmsModule } from './sms/sms.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { OssModule } from '@/oss/oss.module'
     UserModule,
     AdminModule,
     OssModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

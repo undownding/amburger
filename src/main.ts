@@ -45,7 +45,6 @@ function setupSwagger(app: INestApplication): void {
   const builder = new DocumentBuilder()
     .setTitle('Amburger')
     .setDescription('后端业务 API')
-    .setBasePath('api')
     .setVersion('0.0.1')
     .addCookieAuth('jwt')
     .build()
