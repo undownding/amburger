@@ -13,6 +13,9 @@ import { AuthUsernamePasswordStrategy } from '@/user/auth/strategies/auth-userna
 import { LocalAuthGuard } from '@/user/auth/guards/local-auth.guard'
 import { PasswordService } from '@/user/auth/password.service'
 import { JwtModule } from '@nestjs/jwt'
+import { SmsModule } from '@/sms/sms.module'
+import { AuthPhoneCodeStrategy } from '@/user/auth/strategies/auth-phone-code.strategy'
+import { CacheModule } from '@nestjs/common'
 
 describe('UserService', () => {
   let service: UserService
@@ -23,6 +26,9 @@ describe('UserService', () => {
         TypeOrmModule.forRoot(typeOrmModuleOptions),
         TypeOrmModule.forFeature([User, Role]),
         ConfigModule,
+        CacheModule.register({
+          isGlobal: true,
+        }),
         JwtModule.registerAsync({
           imports: [ConfigModule],
           inject: [ConfigService],
@@ -31,6 +37,7 @@ describe('UserService', () => {
             signOptions: { expiresIn: '7d' },
           }),
         }),
+        SmsModule,
       ],
       providers: [
         UserService,
@@ -38,6 +45,7 @@ describe('UserService', () => {
         RoleService,
         AuthJwtStrategy,
         AuthUsernamePasswordStrategy,
+        AuthPhoneCodeStrategy,
         JwtGuard,
         LocalAuthGuard,
         PasswordService,

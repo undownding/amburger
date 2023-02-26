@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { AuthService } from '@/user/auth/auth.service'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-local'
@@ -22,6 +22,12 @@ export class AuthUsernamePasswordStrategy extends PassportStrategy(
 
   async validate(username: string, password: string): Promise<User> {
     const user = await this.userService.getByUserName(username)
+    if (!user) {
+      return null
+    }
+    if (user.banned) {
+      throw new UnauthorizedException('用户审核未通过或已封禁')
+    }
     const isCorrect = await this.authService.checkPassword(user, password)
     if (!isCorrect) {
       return null

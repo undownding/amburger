@@ -18,14 +18,16 @@ export class SmsProxyService extends BaseSmsService {
     super()
   }
 
-  async sendCode(body: SmsDto): Promise<void> {
+  async sendCode(
+    body: SmsDto,
+    code = (Math.random() * 1e6).toFixed().padStart(6, '0'),
+  ): Promise<void> {
     const regionCode = body.regionCode || '+86'
     const phone = body.phone
     const key = `phone:countdown:${regionCode}${phone}`
     const isCd = await this.cacheManager.get<boolean>(key)
     if (isCd) throw new ConflictException('短信冷却中')
-    const code = (Math.random() * 1e6).toFixed().padStart(6, '0')
-    await this.smsService.sendCode({ regionCode, phone }, code)
+    await this.smsService.sendCode(body, code)
     await this.cacheManager.set(key, true, 60)
     await this.cacheManager.set(`phone:${regionCode}${phone}:code`, code, 300)
   }

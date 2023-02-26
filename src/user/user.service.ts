@@ -25,6 +25,26 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     return this.findOne({ where: { name: username } })
   }
 
+  async getByPhone(regionCode: string, phone: string): Promise<User> {
+    return this.findOne({ where: { regionCode, phone } })
+  }
+
+  async signUp(
+    regionCode: string,
+    phone: string,
+    name: string,
+    password: string,
+  ): Promise<User> {
+    const salt = this.passwordService.generateSalt()
+    return await this.create({
+      regionCode,
+      phone,
+      name,
+      salt,
+      password: await this.passwordService.hashPassword(password, salt),
+    })
+  }
+
   async onModuleInit(): Promise<void> {
     const [roleCount, userCount] = await Promise.all([
       this.roleService.count(),

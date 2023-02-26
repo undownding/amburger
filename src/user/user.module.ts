@@ -15,6 +15,7 @@ import { LocalAuthGuard } from '@/user/auth/guards/local-auth.guard'
 import { AuthUsernamePasswordStrategy } from '@/user/auth/strategies/auth-username-password.strategy'
 import { PasswordService } from '@/user/auth/password.service'
 import { JwtModule } from '@nestjs/jwt'
+import { AuthPhoneCodeStrategy } from '@/user/auth/strategies/auth-phone-code.strategy'
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { JwtModule } from '@nestjs/jwt'
     AuthJwtStrategy,
     LocalAuthGuard,
     AuthUsernamePasswordStrategy,
+    AuthPhoneCodeStrategy,
     PasswordService,
     JwtGuard,
     RolesGuard,

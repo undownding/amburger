@@ -14,7 +14,7 @@ interface IToken {
 export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(configService: ConfigService) {
     super({
-      jwtFromRequest: AuthJwtStrategy.fromCookie,
+      jwtFromRequest: AuthJwtStrategy.fromCookieOrHeader,
       secretOrKey: configService.get('JWT_SECRET'),
     })
   }
@@ -24,10 +24,6 @@ export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       return authHeader.substring(7, authHeader.length)
     }
-    return req.cookies['jwt']
-  }
-
-  public static fromCookie(req: Request): string {
     return req.cookies['jwt']
   }
 

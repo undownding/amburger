@@ -29,13 +29,13 @@ export class User extends BaseEntity {
   roles: Role[]
 
   @Column({ unique: true, nullable: true })
-  phoneCode?: string
-
-  @Column({ unique: true, nullable: true, default: '' })
   email?: string
 
-  @Column({ default: '86' })
+  @Column({ default: '+86' })
   regionCode: string
+
+  @Column({ unique: true, nullable: true })
+  phone?: string
 
   @Column()
   password: string
