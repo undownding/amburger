@@ -31,6 +31,9 @@ export class User extends BaseEntity {
   @Column({ unique: true, nullable: true })
   email?: string
 
+  @Column({ unique: true, nullable: true })
+  unionId?: string
+
   @Column({ default: '+86' })
   regionCode: string
 

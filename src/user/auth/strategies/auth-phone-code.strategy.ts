@@ -13,6 +13,7 @@ import { Cache } from 'cache-manager'
 import { AuthPhoneCodeDto } from '@/user/auth/auth.dto'
 import * as randomstring from 'randomstring'
 import { SmsDto } from '@/sms/sms.dto'
+import { randomBytes } from 'crypto'
 
 @Injectable()
 export class AuthPhoneCodeStrategy extends PassportStrategy(
@@ -31,23 +32,16 @@ export class AuthPhoneCodeStrategy extends PassportStrategy(
     const isCorrect = await this.verifyCode(req.body, code)
     let user = await this.userService.getByPhone(regionCode, phone)
     if (!user && isCorrect) {
-      user = await this.userService.signUp(
-        null,
-        regionCode || '+86',
+      user = await this.userService.signUp({
         phone,
-        `手机用户_${randomstring.generate({
+        username: `手机用户_${randomstring.generate({
           length: 6,
           readable: true,
           charset: 'alphanumeric',
           capitalization: 'lowercase',
         })}`,
-        randomstring.generate({
-          length: 8,
-          readable: false,
-          charset: 'alphanumeric',
-          capitalization: 'lowercase',
-        }),
-      )
+        password: randomBytes(8).toString('hex'),
+      })
     }
     if (user && user.banned) {
       throw new UnauthorizedException('用户审核未通过或已封禁')

@@ -17,11 +17,13 @@ import { PasswordService } from '@/user/auth/password.service'
 import { JwtModule } from '@nestjs/jwt'
 import { AuthPhoneCodeStrategy } from '@/user/auth/strategies/auth-phone-code.strategy'
 import { AuthEmailPasswordStrategy } from '@/user/auth/strategies/auth-email-password.strategy'
+import { HttpModule } from '@nestjs/axios'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Role]),
     ConfigModule,
+    HttpModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({

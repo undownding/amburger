@@ -35,7 +35,11 @@ describe('AuthEmailPasswordStrategy', () => {
     service = module.get<UserService>(UserService)
     strategy = module.get<AuthEmailPasswordStrategy>(AuthEmailPasswordStrategy)
 
-    await service.signUp('admin@local', '+86', null, 'tiger', 'rabbit')
+    await service.signUp({
+      email: 'admin@local',
+      username: 'tiger',
+      password: 'rabbit',
+    })
   })
 
   it('should be defined', () => {

@@ -46,7 +46,10 @@ describe('AuthUserNamePasswordStrategy', () => {
     authService = module.get(AuthService)
     strategy = new AuthUsernamePasswordStrategy(authService, userService)
 
-    await userService.signUp(null, '+86', null, 'panda', 'good')
+    await userService.signUp({
+      username: 'panda',
+      password: 'good',
+    })
   })
 
   it('should verify by userName and password', async () => {

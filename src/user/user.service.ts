@@ -7,6 +7,8 @@ import { Repository } from 'typeorm'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { ConfigService } from '@nestjs/config'
 import { PasswordService } from '@/user/auth/password.service'
+import { AuthDto } from '@/user/auth/auth.dto'
+import * as randomstring from 'randomstring'
 
 @Injectable()
 export class UserService extends BaseCrudService<User> implements OnModuleInit {
@@ -33,21 +35,28 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     return this.findOne({ where: { email } })
   }
 
-  async signUp(
-    email: string,
-    regionCode: string,
-    phone: string,
-    name: string,
-    password: string,
-  ): Promise<User> {
+  async getByUnionId(unionId: string): Promise<User> {
+    return this.findOne({ where: { unionId } })
+  }
+
+  async signUp(data: AuthDto): Promise<User> {
     const salt = this.passwordService.generateSalt()
     return await this.create({
-      email,
-      regionCode,
-      phone,
-      name,
+      email: data['email'],
+      regionCode: data['regionCode'] || '+86',
+      phone: data['phone'],
+      name: data['name'],
       salt,
-      password: await this.passwordService.hashPassword(password, salt),
+      password: await this.passwordService.hashPassword(
+        data['password'] ||
+          randomstring.generate({
+            length: 8,
+            readable: false,
+            charset: 'alphanumeric',
+            capitalization: 'lowercase',
+          }),
+        salt,
+      ),
     })
   }
 
