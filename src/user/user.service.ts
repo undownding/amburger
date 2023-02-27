@@ -29,7 +29,12 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     return this.findOne({ where: { regionCode, phone } })
   }
 
+  async getByEmail(email: string): Promise<User> {
+    return this.findOne({ where: { email } })
+  }
+
   async signUp(
+    email: string,
     regionCode: string,
     phone: string,
     name: string,
@@ -37,6 +42,7 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
   ): Promise<User> {
     const salt = this.passwordService.generateSalt()
     return await this.create({
+      email,
       regionCode,
       phone,
       name,

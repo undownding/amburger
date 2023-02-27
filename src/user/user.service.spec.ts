@@ -6,15 +6,10 @@ import { typeOrmModuleOptions } from '@/lib/data-source'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
-import { AuthJwtStrategy } from '@/user/auth/strategies/auth-jwt.strategy'
-import { JwtGuard } from '@/user/auth/auth-jwt.guard'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { AuthUsernamePasswordStrategy } from '@/user/auth/strategies/auth-username-password.strategy'
-import { LocalAuthGuard } from '@/user/auth/guards/local-auth.guard'
 import { PasswordService } from '@/user/auth/password.service'
 import { JwtModule } from '@nestjs/jwt'
 import { SmsModule } from '@/sms/sms.module'
-import { AuthPhoneCodeStrategy } from '@/user/auth/strategies/auth-phone-code.strategy'
 import { CacheModule } from '@nestjs/common'
 
 describe('UserService', () => {
@@ -39,17 +34,7 @@ describe('UserService', () => {
         }),
         SmsModule,
       ],
-      providers: [
-        UserService,
-        AuthService,
-        RoleService,
-        AuthJwtStrategy,
-        AuthUsernamePasswordStrategy,
-        AuthPhoneCodeStrategy,
-        JwtGuard,
-        LocalAuthGuard,
-        PasswordService,
-      ],
+      providers: [UserService, AuthService, RoleService, PasswordService],
     }).compile()
 
     service = module.get<UserService>(UserService)

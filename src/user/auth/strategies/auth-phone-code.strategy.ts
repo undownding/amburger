@@ -32,6 +32,7 @@ export class AuthPhoneCodeStrategy extends PassportStrategy(
     let user = await this.userService.getByPhone(regionCode, phone)
     if (!user && isCorrect) {
       user = await this.userService.signUp(
+        null,
         regionCode || '+86',
         phone,
         `手机用户_${randomstring.generate({
