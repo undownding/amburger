@@ -1,17 +1,28 @@
 import {
+  BeforeInsert,
   Column,
   Entity,
   JoinTable,
   ManyToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm'
 import { BaseEntity } from '@/lib/base-entity'
 import { Role } from '@/user/role/role.entity'
+import { customAlphabet, nanoid } from 'nanoid'
+
+type IdOptions = {
+  length?: number
+  customAlphabet?: string
+}
+
+const defaultIdOptions: IdOptions = {
+  length: 10,
+}
 
 @Entity()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('increment')
-  id: number
+  @PrimaryColumn({ type: 'varchar', length: defaultIdOptions.length })
+  id: string
   @Column({ unique: true })
   name: string
 
@@ -45,4 +56,12 @@ export class User extends BaseEntity {
 
   @Column()
   salt: string
+
+  @BeforeInsert()
+  setId() {
+    const nanoId = defaultIdOptions?.customAlphabet
+      ? customAlphabet(defaultIdOptions.customAlphabet, defaultIdOptions.length)
+      : nanoid
+    this.id = nanoId(defaultIdOptions.length)
+  }
 }

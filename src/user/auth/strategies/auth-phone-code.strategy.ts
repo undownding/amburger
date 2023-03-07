@@ -29,6 +29,9 @@ export class AuthPhoneCodeStrategy extends PassportStrategy(
 
   async validate(req: Request | { body: AuthPhoneCodeDto }): Promise<User> {
     const { regionCode, phone, code } = req.body
+    if (!code) {
+      return null
+    }
     const isCorrect = await this.verifyCode(req.body, code)
     let user = await this.userService.getByPhone(regionCode, phone)
     if (!user && isCorrect) {

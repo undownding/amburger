@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt'
 import { nanoid } from 'nanoid'
 
 interface IToken {
-  id: number
+  id: string
   tokenId: string
 }
 
@@ -29,7 +29,7 @@ export class AuthService {
   async sign(user: User): Promise<string> {
     return this.jwtService.sign({
       id: user.id,
-      tokenId: nanoid(),
+      tokenId: nanoid(16),
     } as IToken)
   }
 }

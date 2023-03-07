@@ -13,14 +13,18 @@ export interface Paged<T> {
   count: number
   data: T[]
 }
+
 export class BaseCrudService<T extends BaseEntity> {
   private baseRepository: Repository<T>
+
   protected constructor(repository: Repository<T>) {
     this.baseRepository = repository
   }
+
   public async getById(id: IDType): Promise<T> {
     return this.baseRepository.findOneById(id)
   }
+
   public async listByIds(ids: IDType[]): Promise<T[]> {
     return this.baseRepository.findByIds(ids)
   }
@@ -38,7 +42,7 @@ export class BaseCrudService<T extends BaseEntity> {
   }
 
   public async create(data: DeepPartial<T>): Promise<T> {
-    return this.baseRepository.save(data)
+    return this.baseRepository.save(this.baseRepository.create(data))
   }
 
   public async search(
