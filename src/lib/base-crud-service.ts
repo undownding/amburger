@@ -6,12 +6,32 @@ import {
 } from 'typeorm'
 import { DeepPartial } from 'typeorm/common/DeepPartial'
 import { BaseEntity } from '@/lib/base-entity'
+import { ApiPropertyOptional } from '@nestjs/swagger'
+import { IsInt, IsOptional, Min } from 'class-validator'
 
 export type IDType = number | string
 
 export interface Paged<T> {
   count: number
   data: T[]
+}
+
+export class PagedDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  page = 1
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  limit = 20
+
+  get skip(): number {
+    return (this.page - 1) * this.limit
+  }
 }
 
 export class BaseCrudService<T extends BaseEntity> {
