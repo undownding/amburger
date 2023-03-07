@@ -29,7 +29,7 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest()
     return this.userService.exists({
       where: {
-        uid: request.user.id,
+        id: request.user.id,
         roles: { name: In(roles) },
       },
     })
