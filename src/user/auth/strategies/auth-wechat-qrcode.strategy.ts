@@ -46,6 +46,8 @@ export class AuthWechatQrCodeStrategy extends PassportStrategy(
   }
 
   async validate({ body }: { body: AuthWeChatDto }): Promise<User> {
+    // 当以后有更多的登录类型时，在 validate 方法开始时判断 body.type，
+    // 若 body.type 不为 'wechat-qrcode'，则直接返回 null
     const grantType: GrantType = 'authorization_code'
     const token: TokenResDto = await firstValueFrom(
       this.httpService.get<TokenResDto>(

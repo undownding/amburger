@@ -4,4 +4,5 @@ export class LocalAuthGuard extends AuthGuard([
   'username-password',
   'phone-code',
   'email-password',
+  'wechat-qrcode',
 ]) {}

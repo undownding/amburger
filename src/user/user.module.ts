@@ -18,6 +18,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { AuthPhoneCodeStrategy } from '@/user/auth/strategies/auth-phone-code.strategy'
 import { AuthEmailPasswordStrategy } from '@/user/auth/strategies/auth-email-password.strategy'
 import { HttpModule } from '@nestjs/axios'
+import { AuthWechatQrCodeStrategy } from '@/user/auth/strategies/auth-wechat-qrcode.strategy'
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { HttpModule } from '@nestjs/axios'
     AuthUsernamePasswordStrategy,
     AuthPhoneCodeStrategy,
     AuthEmailPasswordStrategy,
+    AuthWechatQrCodeStrategy,
     PasswordService,
     JwtGuard,
     RolesGuard,

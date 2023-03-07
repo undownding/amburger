@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsEmail, IsOptional, IsString } from 'class-validator'
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator'
 
 export class AuthUserNameDto {
   @ApiProperty() @IsString() username: string
@@ -32,10 +32,23 @@ export type AuthDto =
   | AuthEmailDto
   | AuthWeChatDto
 
+export enum AuthType {
+  USERNAME_PASSWORD = 'username-password',
+  PHONE_PASSWORD = 'phone-password',
+  PHONE_CODE = 'phone-code',
+  EMAIL_PASSWORD = 'email-password',
+  WECHAT_QRCODE = 'wechat-qrcode',
+  ALIPAY_QRCODE = 'alipay-qrcode',
+}
+
 export class AuthBodyDto {
   @ApiPropertyOptional() @IsOptional() @IsString() username?: string
   @ApiPropertyOptional() @IsOptional() @IsString() phone?: string
   @ApiPropertyOptional() @IsOptional() @IsEmail() email?: string
   @ApiPropertyOptional() @IsOptional() @IsString() password?: string
   @ApiPropertyOptional() @IsOptional() @IsString() code?: string
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsEnum(AuthType, { message: 'invalid auth type' })
+  type?: AuthType
 }
