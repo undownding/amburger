@@ -24,7 +24,11 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
   }
 
   async getByUserName(username: string): Promise<User> {
-    return this.findOne({ where: { name: username } })
+    return this.repository
+      .createQueryBuilder('user')
+      .where('name = :name', { name: username })
+      .addSelect(['user.password', 'user.salt'])
+      .getOne()
   }
 
   async getByPhone(regionCode: string, phone: string): Promise<User> {
@@ -32,7 +36,11 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
   }
 
   async getByEmail(email: string): Promise<User> {
-    return this.findOne({ where: { email } })
+    return this.repository
+      .createQueryBuilder('user')
+      .where('email = :email', { email })
+      .addSelect(['user.password', 'user.salt'])
+      .getOne()
   }
 
   async getByUnionId(unionId: string): Promise<User> {

@@ -28,4 +28,12 @@ export class AdminController {
       query.limit,
     )
   }
+
+  @Get('/')
+  @ApiSummary('获取用戶列表')
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  async getUserList(@Query() query: PagedDto): Promise<Paged<User>> {
+    return this.userService.search({}, query.skip, query.limit)
+  }
 }

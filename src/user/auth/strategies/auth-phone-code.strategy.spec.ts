@@ -64,7 +64,7 @@ describe('AuthPhoneCodeStrategy', () => {
   })
 
   it('should verify a exist user', async () => {
-    await repository.save({
+    await userService.create({
       regionCode: '+86',
       phone: '12345678901',
       name: 'PhoneUser',
