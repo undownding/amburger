@@ -45,7 +45,7 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
       email: data['email'],
       regionCode: data['regionCode'] || '+86',
       phone: data['phone'],
-      name: data['name'],
+      name: data['name'] || data['username'],
       salt,
       password: await this.passwordService.hashPassword(
         data['password'] ||
@@ -66,12 +66,16 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
       this.count(),
     ])
     if (roleCount === 0 && userCount === 0) {
-      const role = await this.roleService.create({ name: 'ADMIN' })
+      const roles = await Promise.all([
+        this.roleService.create({ name: 'SUPER_ADMIN' }),
+        this.roleService.create({ name: 'ADMIN' }),
+        this.roleService.create({ name: 'USER' }),
+      ])
       const defaultUserName = this.configService.get('DEFAULT_USER_NAME')
       const salt = this.passwordService.generateSalt()
       await this.create({
         name: defaultUserName,
-        roles: [role],
+        roles,
         salt,
         password: await this.passwordService.hashPassword(
           this.configService.get('DEFAULT_USER_PASSWORD'),

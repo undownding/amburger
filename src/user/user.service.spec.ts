@@ -47,8 +47,7 @@ describe('UserService', () => {
 
   it('should have one user', async () => {
     const users = await service.findAll()
-    expect(users.length).toBe(1)
-    expect(users[0].roles.length).toBe(1)
-    expect(users[0].roles[0].name).toBe('ADMIN')
+    expect(users).toHaveLength(1)
+    expect(users[0].roles).toHaveLength(3)
   })
 })
