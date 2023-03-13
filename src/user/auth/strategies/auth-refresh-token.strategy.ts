@@ -6,25 +6,28 @@ import { PassportStrategy } from '@nestjs/passport'
 import { IToken } from '@/user/auth/auth.decorator'
 
 @Injectable()
-export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class AuthRefreshTokenStrategy extends PassportStrategy(
+  Strategy,
+  'refresh_token',
+) {
   constructor(configService: ConfigService) {
     super({
-      jwtFromRequest: AuthJwtStrategy.fromCookieOrHeader,
+      jwtFromRequest: AuthRefreshTokenStrategy.fromHeader,
       secretOrKey: configService.get('JWT_SECRET'),
     })
   }
 
-  public static fromCookieOrHeader(req: Request): string {
+  public static fromHeader(req: Request): string {
     const authHeader = req.header('authorization')
     if (authHeader && authHeader.startsWith('Bearer ')) {
       return authHeader.substring(7, authHeader.length)
     }
-    return req.cookies['access_token']
+    return null
   }
 
   // eslint-disable-next-line class-methods-use-this
   public async validate(payload: IToken): Promise<object> {
-    if (payload.type !== 'access_token') {
+    if (payload.type !== 'refresh_token') {
       throw new BadRequestException('token 类型无效')
     }
     return payload

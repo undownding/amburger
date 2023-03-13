@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UserController } from './user.controller'
-import { JwtGuard } from '@/user/auth/auth-jwt.guard'
+import { JwtGuard } from '@/user/auth/guards/auth-jwt.guard'
 import { AuthJwtStrategy } from '@/user/auth/strategies/auth-jwt.strategy'
 import { AuthService } from '@/user/auth/auth.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -19,6 +19,7 @@ import { AuthPhoneCodeStrategy } from '@/user/auth/strategies/auth-phone-code.st
 import { AuthEmailPasswordStrategy } from '@/user/auth/strategies/auth-email-password.strategy'
 import { HttpModule } from '@nestjs/axios'
 import { AuthWechatQrCodeStrategy } from '@/user/auth/strategies/auth-wechat-qrcode.strategy'
+import { AuthRefreshTokenStrategy } from '@/user/auth/strategies/auth-refresh-token.strategy'
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AuthWechatQrCodeStrategy } from '@/user/auth/strategies/auth-wechat-qrc
     AuthPhoneCodeStrategy,
     AuthEmailPasswordStrategy,
     AuthWechatQrCodeStrategy,
+    AuthRefreshTokenStrategy,
     PasswordService,
     JwtGuard,
     RolesGuard,

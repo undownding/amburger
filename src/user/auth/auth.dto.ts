@@ -58,3 +58,8 @@ export class AuthRespDto extends OmitType(User, ['password', 'salt', 'setId']) {
   @ApiProperty({ description: '用于访问 api 的 token' }) accessToken: string
   @ApiProperty({ description: '用于刷新 accessToken' }) refreshToken: string
 }
+
+export class TokenRespDto {
+  @ApiProperty() accessToken: string
+  @ApiProperty() refreshToken: string
+}

@@ -1,12 +1,19 @@
 import { Body, Controller, Post, Res } from '@nestjs/common'
-import { AuthBodyDto, AuthRespDto } from '@/user/auth/auth.dto'
-import { Me, TryAuth } from '@/user/auth/auth.decorator'
+import { AuthBodyDto, AuthRespDto, TokenRespDto } from '@/user/auth/auth.dto'
+import {
+  IToken,
+  Me,
+  NeedRefreshToken,
+  Token,
+  TryAuth,
+} from '@/user/auth/auth.decorator'
 import { User } from '@/user/user.entity'
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '@/user/auth/auth.service'
 import { Response } from 'express'
 import { ApiSummary } from '@/lib/nestjs-ext'
 import Bluebird from 'bluebird'
+import moment from 'moment'
 
 @Controller('auth')
 @ApiTags('登录相关接口')
@@ -29,7 +36,38 @@ export class AuthController {
       accessToken: this.authService.sign(me, 'access_token'),
       refreshToken: this.authService.sign(me, 'refresh_token'),
     })
-    res.cookie('accessToken', resp.accessToken)
+    res.cookie('access_token', resp.accessToken)
+    res.json(resp)
+  }
+
+  @Post('token')
+  @NeedRefreshToken()
+  @ApiOperation({
+    summary: '刷新令牌',
+    description:
+      '当 access_token 过期时，使用 refresh_token 刷新 access_token（需要在 header 中携带 refresh_token）',
+  })
+  @ApiOkResponse({
+    status: 200,
+    type: TokenRespDto,
+    description: '刷新令牌成功',
+  })
+  async refreshToken(
+    @Me() me: IToken,
+    @Token() rawToken,
+    @Res() res: Response,
+  ): Promise<void> {
+    const exp = moment(rawToken.exp * 1000)
+    const refreshToken =
+      exp.diff(moment(), 'days') < 3
+        ? await this.authService.sign(me, 'refresh_token')
+        : rawToken
+
+    const resp: TokenRespDto = await Bluebird.props({
+      accessToken: this.authService.sign(me, 'access_token'),
+      refreshToken,
+    })
+    res.cookie('access_token', resp.accessToken)
     res.json(resp)
   }
 }

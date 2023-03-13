@@ -6,6 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import { nanoid } from 'nanoid'
 import { IToken, TokenType } from '@/user/auth/auth.decorator'
+import { IDType } from '@/lib/base-crud-service'
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,7 @@ export class AuthService {
     })
   }
 
-  async sign(user: User, type: TokenType): Promise<string> {
+  async sign(user: { id: IDType }, type: TokenType): Promise<string> {
     const token: IToken = {
       id: user.id,
       tokenId: nanoid(16),
