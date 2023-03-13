@@ -5,11 +5,7 @@ import * as argon2 from 'argon2'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import { nanoid } from 'nanoid'
-
-interface IToken {
-  id: string
-  tokenId: string
-}
+import { IToken, TokenType } from '@/user/auth/auth.decorator'
 
 @Injectable()
 export class AuthService {
@@ -26,10 +22,14 @@ export class AuthService {
     })
   }
 
-  async sign(user: User): Promise<string> {
-    return this.jwtService.sign({
+  async sign(user: User, type: TokenType): Promise<string> {
+    const token: IToken = {
       id: user.id,
       tokenId: nanoid(16),
-    } as IToken)
+      type,
+    }
+    return this.jwtService.sign(token, {
+      expiresIn: type === 'refresh_token' ? '7d' : '7200s',
+    })
   }
 }

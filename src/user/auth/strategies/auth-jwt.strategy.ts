@@ -1,14 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Request } from 'express'
 import { Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
-
-interface IToken {
-  uid: number
-  tokenId: string
-  type: string
-}
+import { IToken } from '@/user/auth/auth.decorator'
 
 @Injectable()
 export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -29,6 +24,9 @@ export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   // eslint-disable-next-line class-methods-use-this
   public async validate(payload: IToken): Promise<object> {
+    if (payload.type !== 'access_token') {
+      throw new BadRequestException('token 类型无效')
+    }
     return payload
   }
 }

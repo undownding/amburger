@@ -1,5 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger'
 import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator'
+import { User } from '@/user/user.entity'
 
 export class AuthUserNameDto {
   @ApiProperty() @IsString() username: string
@@ -47,8 +48,13 @@ export class AuthBodyDto {
   @ApiPropertyOptional() @IsOptional() @IsEmail() email?: string
   @ApiPropertyOptional() @IsOptional() @IsString() password?: string
   @ApiPropertyOptional() @IsOptional() @IsString() code?: string
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ enum: AuthType })
   @IsOptional()
   @IsEnum(AuthType, { message: 'invalid auth type' })
   type?: AuthType
+}
+
+export class AuthRespDto extends OmitType(User, ['password', 'salt', 'setId']) {
+  @ApiProperty({ description: '用于访问 api 的 token' }) accessToken: string
+  @ApiProperty({ description: '用于刷新 accessToken' }) refreshToken: string
 }

@@ -1,7 +1,7 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
-import { BaseCrudService } from '@/lib/base-crud-service'
+import { BaseCrudService, IDType } from '@/lib/base-crud-service'
 import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
 import { getRepositoryToken } from '@nestjs/typeorm'
@@ -23,24 +23,28 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     super(repository)
   }
 
-  async getByUserName(username: string): Promise<User> {
-    return this.repository
+  async getByUserName(username: string, selectPassword = false): Promise<User> {
+    const query = this.repository
       .createQueryBuilder('user')
       .where('name = :name', { name: username })
-      .addSelect(['user.password', 'user.salt'])
-      .getOne()
+    if (selectPassword) {
+      query.addSelect(['user.password', 'user.salt'])
+    }
+    return query.getOne()
   }
 
   async getByPhone(regionCode: string, phone: string): Promise<User> {
     return this.findOne({ where: { regionCode, phone } })
   }
 
-  async getByEmail(email: string): Promise<User> {
-    return this.repository
+  async getByEmail(email: string, selectPassword = false): Promise<User> {
+    const query = this.repository
       .createQueryBuilder('user')
       .where('email = :email', { email })
-      .addSelect(['user.password', 'user.salt'])
-      .getOne()
+    if (selectPassword) {
+      query.addSelect(['user.password', 'user.salt'])
+    }
+    return query.getOne()
   }
 
   async getByUnionId(unionId: string): Promise<User> {
@@ -65,6 +69,14 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
           }),
         salt,
       ),
+    })
+  }
+
+  async updatePassword(id: IDType, password: string): Promise<void> {
+    const salt = this.passwordService.generateSalt()
+    await this.update(id, {
+      salt,
+      password: await this.passwordService.hashPassword(password, salt),
     })
   }
 

@@ -75,9 +75,9 @@ export class BaseCrudService<T extends BaseEntity> {
       .then(([data, count]) => ({ data, count }))
   }
 
-  public async update(id: IDType, data: object): Promise<T> {
+  public async update(id: IDType, data: Partial<T>): Promise<T> {
     return this.baseRepository
-      .update(id, data)
+      .update(id, data as object)
       .then((response) => response.raw[0])
   }
 

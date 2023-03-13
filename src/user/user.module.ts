@@ -29,7 +29,6 @@ import { AuthWechatQrCodeStrategy } from '@/user/auth/strategies/auth-wechat-qrc
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '7d' },
       }),
     }),
   ],
