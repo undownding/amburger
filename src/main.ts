@@ -41,7 +41,7 @@ async function bootstrap() {
   await app.listen(3000)
 }
 
-function setupSwagger(app: INestApplication): void {
+export function setupSwagger(app: INestApplication): void {
   const builder = new DocumentBuilder()
     .setTitle('Amburger')
     .setDescription('后端业务 API')

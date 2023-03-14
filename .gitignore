@@ -36,3 +36,7 @@ lerna-debug.log*
 
 # Develpment Enviorment
 *.sqlite
+
+# code generator
+gen/
+openapitools.json
