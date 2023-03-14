@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config'
 import { AdminModule } from './admin/admin.module'
 import { OssModule } from '@/oss/oss.module'
 import { SmsModule } from './sms/sms.module'
+import { ResourceModule } from './resource/resource.module'
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SmsModule } from './sms/sms.module'
     AdminModule,
     OssModule,
     SmsModule,
+    ResourceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

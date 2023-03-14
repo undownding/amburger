@@ -1,6 +1,8 @@
 import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm'
 
 export class BaseEntity {
+  id: string
+
   @CreateDateColumn()
   createdAt: Date
 

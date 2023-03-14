@@ -10,6 +10,7 @@ import { BaseEntity } from '@/lib/base-entity'
 import { Role } from '@/user/role/role.entity'
 import { customAlphabet, nanoid } from 'nanoid'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { IDType } from '@/lib/base-crud-service'
 
 type IdOptions = {
   length?: number
@@ -24,7 +25,8 @@ const defaultIdOptions: IdOptions = {
 export class User extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: defaultIdOptions.length })
   @ApiProperty({ example: '9r8-1fn0Vk', description: '用户ID' })
-  id: string
+  id: IDType
+
   @Column({ unique: true })
   @ApiProperty({ example: 'admin', description: '用户名' })
   name: string

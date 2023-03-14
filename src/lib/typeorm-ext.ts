@@ -12,6 +12,16 @@ export function JsonColumn(options?: ColumnOptions) {
   }
 }
 
+export function PointColumn(options?: ColumnOptions) {
+  return function (object: object, propertyName: string) {
+    const columnOptions: ColumnOptions = {
+      type: typeOrmModuleOptions.type === 'sqlite' ? 'simple-json' : 'point',
+      ...options,
+    }
+    Column(columnOptions)(object, propertyName)
+  }
+}
+
 export class NanoIdColumnOptions implements ColumnOptions {
   length?: number
   customAlphabet?: string
