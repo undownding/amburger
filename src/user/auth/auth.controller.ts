@@ -12,8 +12,8 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '@/user/auth/auth.service'
 import { Response } from 'express'
 import { ApiSummary } from '@/lib/nestjs-ext'
-import Bluebird from 'bluebird'
-import moment from 'moment'
+import * as Bluebird from 'bluebird'
+import * as moment from 'moment'
 
 @Controller('auth')
 @ApiTags('登录相关接口')

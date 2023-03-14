@@ -35,9 +35,9 @@ export const Me: () => ParameterDecorator = createParamDecorator(
 
 export const Token: () => ParameterDecorator = createParamDecorator(
   (data, context: ExecutionContext) =>
-    (context.switchToHttp().getRequest() as Request).headers
-      .get('authorization')
-      .substring(7),
+    (context.switchToHttp().getRequest() as Request).headers[
+      'authorization'
+    ].substring(7),
 )
 
 export const NeedLogin: () => MethodDecorator & ClassDecorator = () => {
