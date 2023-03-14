@@ -3,6 +3,7 @@ import { ALI_POP_CORE } from '@/sms/ali/ali.constants'
 import { ConfigService } from '@nestjs/config'
 import { AliSmsService } from '@/sms/ali/ali.sms.service'
 import * as RPCClient from '@alicloud/pop-core'
+import { SMS_SERVICE } from '@/sms/sms.constants'
 
 @Module({
   providers: [
@@ -18,8 +19,16 @@ import * as RPCClient from '@alicloud/pop-core'
         })
       },
     },
-    AliSmsService,
+    {
+      provide: SMS_SERVICE,
+      useClass: AliSmsService,
+    },
   ],
-  exports: [AliSmsService],
+  exports: [
+    {
+      provide: SMS_SERVICE,
+      useExisting: AliSmsService,
+    },
+  ],
 })
 export class AliModule {}
