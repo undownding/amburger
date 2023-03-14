@@ -1,0 +1,4 @@
+### 获取个人信息
+GET {{ base-url }}/api/user/me
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
