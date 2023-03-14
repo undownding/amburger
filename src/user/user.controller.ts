@@ -1,14 +1,18 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
 import { IToken, Me, NeedLogin, TryAuth } from '@/user/auth/auth.decorator'
 import { User } from '@/user/user.entity'
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger'
 import { ApiSummary } from '@/lib/nestjs-ext'
 import { UserService } from '@/user/user.service'
 import {
   UserResetPasswordDto,
+  UserSearchDto,
+  UserSearchResDto,
   UserUpdateDto,
   UserUpdatePasswordDto,
 } from '@/user/user.dto'
+import { IDType } from '@/lib/base-crud-service'
+import { Like } from 'typeorm'
 
 @Controller('user')
 @ApiTags('用户')
@@ -48,5 +52,27 @@ export class UserController {
   @TryAuth()
   async resetPassword(@Me() me: User, @Body() body: UserResetPasswordDto) {
     return this.userService.updatePassword(me.id, body.password)
+  }
+
+  @ApiSummary('根据 id 获取用户')
+  @ApiOkResponse({ type: User })
+  @ApiParam({ name: 'id', description: '用户 id' })
+  @Get(':id')
+  async getUserById(@Param('id') id: IDType): Promise<User> {
+    return this.userService.getById(id)
+  }
+
+  @ApiSummary('搜索用户')
+  @ApiOkResponse({ type: UserSearchResDto })
+  @Get()
+  async search(@Query() query: UserSearchDto): Promise<UserSearchResDto> {
+    return this.userService.search(
+      query.name
+        ? [
+            { name: Like(`%${query.name}%`) },
+            { nickname: Like(`%${query.name}%`) },
+          ]
+        : {},
+    )
   }
 }

@@ -66,7 +66,7 @@ export class BaseCrudService<T extends BaseEntity> {
   }
 
   public async search(
-    where: FindOptionsWhere<T>,
+    where: FindOptionsWhere<T> | FindOptionsWhere<T>[],
     skip = 0,
     limit = 20,
   ): Promise<Paged<T>> {

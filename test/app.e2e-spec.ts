@@ -15,10 +15,10 @@ describe('AppController (e2e)', () => {
     await app.init()
   })
 
-  it('/api/hello (GET)', () => {
+  it('/version (GET)', () => {
     return request(app.getHttpServer())
-      .get('/hello')
+      .get('/version')
       .expect(200)
-      .expect('Hello World!')
+      .expect({ version: '0.0.1' })
   })
 })
