@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { SmsModule } from '@/sms/sms.module'
 import { AuthPhoneCodeStrategy } from '@/user/auth/strategies/auth-phone-code.strategy'
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { typeOrmModuleOptions } from '@/lib/data-source'
 import { User } from '@/user/user.entity'
 import { Role } from '@/user/role/role.entity'
-import { Repository } from 'typeorm'
 import { SmsProxyService } from '@/sms/sms-proxy.service'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
@@ -17,7 +16,6 @@ import { CACHE_MANAGER, CacheModule } from '@nestjs/common'
 import { Cache } from 'cache-manager'
 
 describe('AuthPhoneCodeStrategy', () => {
-  let repository: Repository<User>
   let userService: UserService
   let smsService: SmsProxyService
   let strategy: AuthPhoneCodeStrategy
@@ -56,7 +54,6 @@ describe('AuthPhoneCodeStrategy', () => {
       exports: [UserService],
     }).compile()
 
-    repository = module.get(getRepositoryToken(User))
     userService = module.get(UserService)
     smsService = module.get(SmsProxyService)
     cacheManager = module.get(CACHE_MANAGER)
