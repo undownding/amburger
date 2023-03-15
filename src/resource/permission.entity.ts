@@ -1,5 +1,7 @@
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   ManyToOne,
@@ -7,6 +9,7 @@ import {
 } from 'typeorm'
 import { User } from '@/user/user.entity'
 import { Resource } from '@/resource/resource.entity'
+import { IDType } from '@/lib/base-crud-service'
 
 export enum Permissions {
   READ_ONLY = 'READ_ONLY',
@@ -25,6 +28,15 @@ export class Permission extends BaseEntity {
   @ManyToOne(() => User)
   user: User
 
+  @Column({ type: 'varchar', length: 10 })
+  userId: IDType
+
   @ManyToOne(() => Resource, (resource) => resource)
   resource: Resource
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async beforeSave() {
+    this.userId = this.user.id
+  }
 }

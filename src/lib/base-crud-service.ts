@@ -8,6 +8,7 @@ import { DeepPartial } from 'typeorm/common/DeepPartial'
 import { BaseEntity } from '@/lib/base-entity'
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { IsInt, IsOptional, Min } from 'class-validator'
+import { BadRequestException } from '@nestjs/common'
 
 export type IDType = string // | number
 
@@ -86,7 +87,10 @@ export class BaseCrudService<T extends BaseEntity> {
   }
 
   public async delete(criteria: FindOptionsWhere<T> | IDType): Promise<void> {
-    await this.baseRepository.delete(criteria)
+    const result = await this.baseRepository.delete(criteria)
+    if (result.affected === 0) {
+      throw new BadRequestException('没有被删除的数据')
+    }
   }
 
   public async softDelete(
