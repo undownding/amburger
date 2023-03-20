@@ -5,9 +5,10 @@ import { IDType } from '@/lib/base-crud-service'
 import { ResourceService } from './resource.service'
 import { RESOURCE_NAME } from './resource.constant'
 import { ApiSummary } from '@/lib/nestjs-ext'
-import { ResourceUpdateDto } from '@/resource/resource.dto'
+import { PermissionUpdateDto, ResourceUpdateDto } from '@/resource/resource.dto'
 import { IToken, Me, NeedLogin } from '@/user/auth/auth.decorator'
 import { UserService } from '@/user/user.service'
+import { Permission } from '@/resource/permission.entity'
 
 @Controller(RESOURCE_NAME)
 @ApiTags('资源')
@@ -56,5 +57,54 @@ export class ResourceController {
   @NeedLogin()
   async delete(@Param('id') id: IDType, @Me() me: IToken): Promise<void> {
     return this.resourceService.delete(id, me.id)
+  }
+
+  @Post(':id/assigners')
+  @ApiParam({ name: 'id', description: '资源 id' })
+  @ApiSummary('添加协作者')
+  @NeedLogin()
+  async addAssigner(
+    @Param('id') id: IDType,
+    @Body() body: PermissionUpdateDto,
+    @Me() me: IToken,
+  ): Promise<Permission[]> {
+    return this.resourceService.addAssigner(
+      id,
+      me.id,
+      body.userId,
+      body.permission,
+    )
+  }
+
+  @Delete(':id/assigners/:userId')
+  @ApiParam({ name: 'id', description: '资源 id' })
+  @ApiParam({ name: 'userId', description: '用户 id' })
+  @ApiSummary('删除协作者')
+  @NeedLogin()
+  async removeAssigner(
+    @Param('id') id: IDType,
+    @Param('userId') userId: IDType,
+    @Me() me: IToken,
+  ): Promise<Permission[]> {
+    return this.resourceService.removeAssigner(id, me.id, userId)
+  }
+
+  @Post(':id/assigners/:userId')
+  @ApiParam({ name: 'id', description: '资源 id' })
+  @ApiParam({ name: 'userId', description: '用户 id' })
+  @ApiSummary('更新协作者权限')
+  @NeedLogin()
+  async updateAssigner(
+    @Param('id') id: IDType,
+    @Param('userId') userId: IDType,
+    @Body() body: PermissionUpdateDto,
+    @Me() me: IToken,
+  ): Promise<Permission[]> {
+    return this.resourceService.updateAssigner(
+      id,
+      me.id,
+      userId,
+      body.permission,
+    )
   }
 }

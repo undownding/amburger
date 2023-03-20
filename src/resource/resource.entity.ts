@@ -75,14 +75,14 @@ export class Resource extends BaseEntity {
   @ApiPropertyOptional({ description: '如该资源存在附件，使用该字段' })
   attachments?: string[]
 
-  @JsonColumn()
+  @JsonColumn({ nullable: true })
   @ApiPropertyOptional({
     example: { foo: 'bar' },
     description: '其他额外数据，可能为空',
   })
   data?: object
 
-  @PointColumn()
+  @PointColumn({ nullable: true })
   @ApiPropertyOptional({
     example: { type: 'Point', coordinates: [0, 0] },
     description: '坐标点，可能为空，其中数组内容为[long, lat]',

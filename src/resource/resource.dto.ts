@@ -1,5 +1,6 @@
-import { OmitType } from '@nestjs/swagger'
+import { OmitType, PickType } from '@nestjs/swagger'
 import { Resource } from './resource.entity'
+import { Permission } from '@/resource/permission.entity'
 
 export class ResourceUpdateDto extends OmitType(Resource, [
   'id',
@@ -9,4 +10,9 @@ export class ResourceUpdateDto extends OmitType(Resource, [
   'assigners',
   'permissions',
   'setId',
+]) {}
+
+export class PermissionUpdateDto extends PickType(Permission, [
+  'userId',
+  'permission',
 ]) {}
