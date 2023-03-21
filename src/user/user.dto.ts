@@ -33,6 +33,6 @@ export class UserSearchDto extends PagedDto {
 }
 
 export class UserSearchResDto implements Paged<User> {
-  count: number
-  data: User[]
+  @ApiProperty() count: number
+  @ApiProperty({ isArray: true, type: User }) data: User[]
 }

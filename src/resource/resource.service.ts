@@ -10,7 +10,11 @@ import { Resource } from './resource.entity'
 import { Brackets, Repository } from 'typeorm'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { UserService } from '@/user/user.service'
-import { ResourceUpdateDto } from '@/resource/resource.dto'
+import {
+  ResourceSearchQuery,
+  ResourceSearchResDto,
+  ResourceUpdateDto,
+} from '@/resource/resource.dto'
 import { Permission, Permissions } from '@/resource/permission.entity'
 
 @Injectable()
@@ -202,5 +206,42 @@ export class ResourceService extends BaseCrudService<Resource> {
       { permission },
     )
     return this.permissionRepository.find({ where: { resourceId: id } })
+  }
+
+  async getByUser(
+    query: ResourceSearchQuery,
+    userId: IDType,
+  ): Promise<ResourceSearchResDto> {
+    const { skip, limit } = query
+
+    let brackets: Brackets
+
+    if (query.isOwner && query.isAssigner) {
+      brackets = new Brackets((qb) => {
+        qb.where(this.isOwnerBracket).orWhere(this.isAssigner)
+      })
+    } else if (query.isOwner && query.isAssigner !== true) {
+      brackets = this.isOwnerBracket
+    } else if (query.isAssigner && query.isOwner !== true) {
+      brackets = this.isAssigner
+    } else {
+      // 两个参数都没传，默认行为两个都查
+      brackets = new Brackets((qb) => {
+        qb.where(this.isOwnerBracket).orWhere(this.isAssigner)
+      })
+    }
+
+    return this.repository
+      .createQueryBuilder('resource')
+      .leftJoinAndSelect('resource.owner', 'owner')
+      .where('resource.ownerId = :userId', { userId })
+      .andWhere(brackets)
+      .skip(skip)
+      .limit(limit)
+      .getManyAndCount()
+      .then(([data, count]) => ({
+        count,
+        data,
+      }))
   }
 }

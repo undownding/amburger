@@ -1,14 +1,28 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common'
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common'
+import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Resource } from './resource.entity'
 import { IDType } from '@/lib/base-crud-service'
 import { ResourceService } from './resource.service'
 import { RESOURCE_NAME } from './resource.constant'
 import { ApiSummary } from '@/lib/nestjs-ext'
-import { PermissionUpdateDto, ResourceUpdateDto } from '@/resource/resource.dto'
+import {
+  PermissionUpdateDto,
+  ResourceSearchQuery,
+  ResourceSearchResDto,
+  ResourceUpdateDto,
+} from '@/resource/resource.dto'
 import { IToken, Me, NeedLogin } from '@/user/auth/auth.decorator'
 import { UserService } from '@/user/user.service'
 import { Permission } from '@/resource/permission.entity'
+import heredoc from 'tsheredoc'
 
 @Controller(RESOURCE_NAME)
 @ApiTags('资源')
@@ -24,6 +38,28 @@ export class ResourceController {
   @ApiSummary('根据 id 获取资源')
   async getById(@Param('id') id: IDType): Promise<Resource> {
     return this.resourceService.getById(id)
+  }
+
+  @Get()
+  @ApiOkResponse({ type: ResourceSearchResDto })
+  @ApiOperation({
+    summary: '获取用户的资源',
+    description: heredoc`
+    搜索跟当前用户有关联的资源
+    
+    不带 query 参数：返回所有下列两项
+    
+    只带 query.isOwner：返回所有属于该用户创建资源
+    
+    只带 query.isAssigner：返回所有该用户作为协作者参与的资源
+    `,
+  })
+  @NeedLogin()
+  async search(
+    @Query() query: ResourceSearchQuery,
+    @Me() me: IToken,
+  ): Promise<ResourceSearchResDto> {
+    return this.resourceService.getByUser(query, me.id)
   }
 
   @Post()
