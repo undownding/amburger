@@ -14,6 +14,14 @@ steps:
       npm run test:azure
     displayName: 'npm install and output coverage'
 
+  #publish the tests results
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results '
+    inputs:
+      testResultsFiles: $(System.DefaultWorkingDirectory)/junit.xml
+    condition: succeededOrFailed()
+
+  #publish code coverage reports in cobertura format
   - task: PublishCodeCoverageResults@1
     inputs:
       codeCoverageTool: Cobertura
