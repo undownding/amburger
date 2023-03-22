@@ -39,5 +39,4 @@ lerna-debug.log*
 
 # code generator
 gen/
-openapitools.json
 junit.xml
