@@ -45,7 +45,7 @@ jobs:
 
 
   - job: 'build_client_typescript_axios'
-    displayName: 'Build client code for typescript axios''
+    displayName: 'Build client code for typescript axios'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
