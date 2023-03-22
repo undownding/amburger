@@ -74,8 +74,8 @@ jobs:
           java -jar swagger-codegen-cli.jar generate \
             -i dist/swagger.json -o ./gen
 
-      - task: DownloadPipelineArtifact@2
+      - task: PublishPipelineArtifact@1
         inputs:
           artifactName: 'client-typescript-axios'
-          path: $(Build.SourcesDirectory)/gen
+          targetPath: $(Build.SourcesDirectory)/gen
 
