@@ -4,53 +4,76 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 variables:
-  jar_version: 3.0.42
+  jar_version: 3.0.41
 
-steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '19.x'
-    displayName: 'Install Node.js'
+jobs:
+  - job : 'Run lint and tests'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '19.x'
+        displayName: 'Install Node.js'
 
-  - script: |
-      npm install
-      npm run test:azure
-    displayName: 'Install Project Dependency'
+      - script: |
+          npm install
+        displayName: 'Install project dependency'
 
-  - script: |
-      npm run lint
-    displayName: 'Build'
+      - script: |
+          npm run lint
+        displayName: 'Lint'
 
-  - script: |
-      npm run test:azure
-    displayName: 'Test and Generate Coverage Report'
+      - script: |
+          npm run test:azure
+        displayName: 'Test and generate coverage report'
 
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: '11'
-      jdkArchitectureOption: 'x64'
-      jdkSourceOption: 'PreInstalled'
-    displayName: 'Build client code for typescript axios'
-  - script: |
-      java -version
-      wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/$(jar_version)/swagger-codegen-cli-$(jar_version).jar -O swagger-codegen-cli.jar
-      java -jar swagger-codegen-cli.jar generate \
-        -i dist/swagger.json -o ./gen
+      #publish the tests results
+      - task: PublishTestResults@2
+        displayName: 'Publish test results '
+        inputs:
+          testResultsFiles: $(System.DefaultWorkingDirectory)/junit.xml
+        condition: succeededOrFailed()
 
-  #publish the tests results
-  - task: PublishTestResults@2
-    displayName: 'Publish Test Results '
-    inputs:
-      testResultsFiles: $(System.DefaultWorkingDirectory)/junit.xml
-    condition: succeededOrFailed()
+      #publish code coverage reports in cobertura format
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage report'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
 
-  #publish code coverage reports in cobertura format
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
 
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      artifactName: 'client-typescript-axios'
-      path: $(Build.SourcesDirectory)/gen
+  - job: 'Build client code for typescript axios'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '19.x'
+        displayName: 'Install Node.js'
+
+      - script: |
+          npm install
+        displayName: 'Install project dependency'
+
+      - script: |
+          npm run build
+        displayName: 'Build'
+
+      - task: JavaToolInstaller@0
+        inputs:
+          versionSpec: '11'
+          jdkArchitectureOption: 'x64'
+          jdkSourceOption: 'PreInstalled'
+        displayName: 'Build client code for typescript axios'
+      - script: |
+          java -version
+          wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/$(jar_version)/swagger-codegen-cli-$(jar_version).jar -O swagger-codegen-cli.jar
+          java -jar swagger-codegen-cli.jar generate \
+            -i dist/swagger.json -o ./gen
+
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifactName: 'client-typescript-axios'
+          path: $(Build.SourcesDirectory)/gen
+
