@@ -3,6 +3,9 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+variables:
+  jar_version: 3.0.42
+
 steps:
   - task: NodeTool@0
     inputs:
@@ -12,7 +15,27 @@ steps:
   - script: |
       npm install
       npm run test:azure
-    displayName: 'npm install and output coverage'
+    displayName: 'Install Project Dependency'
+
+  - script: |
+      npm run lint
+    displayName: 'Build'
+
+  - script: |
+      npm run test:azure
+    displayName: 'Test and Generate Coverage Report'
+
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '11'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
+    displayName: 'Build client code for typescript axios'
+  - script: |
+      java -version
+      wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/$(jar_version)/swagger-codegen-cli-$(jar_version).jar -O swagger-codegen-cli.jar
+      java -jar swagger-codegen-cli.jar generate \
+        -i dist/swagger.json -o ./gen
 
   #publish the tests results
   - task: PublishTestResults@2
@@ -26,3 +49,8 @@ steps:
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      artifactName: 'client-typescript-axios'
+      path: $(Build.SourcesDirectory)/gen
