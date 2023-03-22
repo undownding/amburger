@@ -77,6 +77,7 @@ jobs:
 
       - task: PublishPipelineArtifact@1
         inputs:
+          displayName: 'Publish artifacts'
           artifactName: 'client-typescript-axios'
           targetPath: $(Build.SourcesDirectory)/gen
 
