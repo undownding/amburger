@@ -14,7 +14,7 @@ RUN npm run build
 
 FROM node:19
 
-RUN apt-get update && apt-get install python3 python3-pip git cmake -y
+#RUN apt-get update && apt-get install python3 python3-pip git cmake -y
 
 RUN mkdir /app
 WORKDIR /app
