@@ -10,7 +10,7 @@ RUN npm ci
 
 COPY src ./src
 COPY nest-cli.json tsconfig.* ./
-RUN npm build
+RUN npm run build
 
 FROM node:19
 
