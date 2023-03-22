@@ -7,7 +7,8 @@ variables:
   jar_version: 3.0.41
 
 jobs:
-  - job : 'Run lint and tests'
+  - job : 'lint_and_test'
+    displayName: 'Run lint and tests'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -43,7 +44,8 @@ jobs:
           summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
 
 
-  - job: 'Build client code for typescript axios'
+  - job: 'build_client_typescript_axios'
+    displayName: 'Build client code for typescript axios''
     pool:
       vmImage: 'ubuntu-latest'
     steps:
