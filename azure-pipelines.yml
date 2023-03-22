@@ -81,3 +81,20 @@ jobs:
           artifactName: 'client-typescript-axios'
           targetPath: $(Build.SourcesDirectory)/gen
 
+
+  - job: 'build_docker_image'
+    displayName: 'Build docker image'
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    variables:
+      imageName: 'pipelines-javascript-docker'
+
+    steps:
+      - task: Docker@2
+        displayName: Build an image
+        inputs:
+          repository: $(imageName)
+          command: build
+          Dockerfile: app/Dockerfile
+
