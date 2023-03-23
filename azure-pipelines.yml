@@ -83,7 +83,7 @@ jobs:
 
 
   - job: 'build_docker_image'
-    displayName: 'Build docker image'
+    displayName: 'Build docker image and push'
     pool:
       vmImage: 'ubuntu-latest'
 
@@ -95,6 +95,8 @@ jobs:
         displayName: Build an image
         inputs:
           repository: $(imageName)
-          command: build
+          command: buildAndPush
           Dockerfile: Dockerfile
+          containerRegistry: AliyunContainerRegistry
+          tags: latest
 
