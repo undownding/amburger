@@ -93,6 +93,9 @@ jobs:
         inputs:
           command: login
           containerRegistry: AliyunContainerRegistry
+      - script: "docker pull registry.cn-hangzhou.aliyuncs.com/$(imageName):latest"
+        displayName: Pull latest for layer caching
+        continueOnError: true # for first build, no cache
       - task: Docker@2
         displayName: Build an image
         inputs:
