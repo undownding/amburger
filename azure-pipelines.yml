@@ -97,11 +97,12 @@ jobs:
         displayName: Pull latest for layer caching
         continueOnError: true # for first build, no cache
       - task: Docker@2
-        displayName: Build an image
+        displayName: Build an image and push to aliyun
         inputs:
           repository: $(imageName)
           command: buildAndPush
           Dockerfile: Dockerfile
           containerRegistry: AliyunContainerRegistry
+          arguments: '--cache-from=registry.cn-hangzhou.aliyuncs.com/$(imageName):latest'
           tags: latest
 
