@@ -1,5 +1,10 @@
 import { Body, Controller, Post, Res } from '@nestjs/common'
-import { AuthBodyDto, AuthRespDto, TokenRespDto } from '@/user/auth/auth.dto'
+import {
+  AuthBodyDto,
+  AuthRespDto,
+  AuthSignUpDto,
+  TokenRespDto,
+} from '@/user/auth/auth.dto'
 import {
   IToken,
   Me,
@@ -14,11 +19,15 @@ import { Response } from 'express'
 import { ApiSummary } from '@/lib/nestjs-ext'
 import * as Bluebird from 'bluebird'
 import * as moment from 'moment'
+import { UserService } from '@/user/user.service'
 
 @Controller('auth')
 @ApiTags('登录相关接口')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post('sign-in')
   @TryAuth()
@@ -29,6 +38,25 @@ export class AuthController {
     @Me() me: User, // 在使用 @TryAuth 时 @Me 为 User 类型，其他用 @NeedLogin 时用 IToken 类型
     @Res() res: Response,
   ): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { salt, password, ...user } = me
+    const resp: AuthRespDto = await Bluebird.props({
+      ...user,
+      accessToken: this.authService.sign(me, 'access_token'),
+      refreshToken: this.authService.sign(me, 'refresh_token'),
+    })
+    res.cookie('access_token', resp.accessToken)
+    res.json(resp)
+  }
+
+  @Post('sign-up')
+  @ApiSummary('注册')
+  @ApiOkResponse({ status: 200, type: AuthRespDto, description: '登录成功' })
+  async signUp(
+    @Body() body: AuthSignUpDto,
+    @Res() res: Response,
+  ): Promise<void> {
+    const me = await this.userService.signUp(body)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { salt, password, ...user } = me
     const resp: AuthRespDto = await Bluebird.props({

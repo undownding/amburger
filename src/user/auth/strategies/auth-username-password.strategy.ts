@@ -21,6 +21,9 @@ export class AuthUsernamePasswordStrategy extends PassportStrategy(
   }
 
   async validate(username: string, password: string): Promise<User> {
+    if (!username || !password) {
+      return null
+    }
     const user = await this.userService.getByUserName(username, true)
     if (!user) {
       return null

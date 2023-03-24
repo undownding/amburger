@@ -1,4 +1,9 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common'
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common'
 import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
 import { BaseCrudService, IDType } from '@/lib/base-crud-service'
@@ -7,7 +12,7 @@ import { Repository } from 'typeorm'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { ConfigService } from '@nestjs/config'
 import { PasswordService } from '@/user/auth/password.service'
-import { AuthDto } from '@/user/auth/auth.dto'
+import { AuthSignUpDto } from '@/user/auth/auth.dto'
 import * as randomstring from 'randomstring'
 
 @Injectable()
@@ -24,6 +29,9 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
   }
 
   async getByUserName(username: string, selectPassword = false): Promise<User> {
+    if (!username) {
+      return null
+    }
     const query = this.repository
       .createQueryBuilder('user')
       .where('name = :name', { name: username })
@@ -33,11 +41,17 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     return query.getOne()
   }
 
-  async getByPhone(regionCode: string, phone: string): Promise<User> {
+  async getByPhone(regionCode = '+86', phone: string): Promise<User> {
+    if (!phone) {
+      return null
+    }
     return this.findOne({ where: { regionCode, phone } })
   }
 
   async getByEmail(email: string, selectPassword = false): Promise<User> {
+    if (!email) {
+      return null
+    }
     const query = this.repository
       .createQueryBuilder('user')
       .where('email = :email', { email })
@@ -51,13 +65,21 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
     return this.findOne({ where: { unionId } })
   }
 
-  async signUp(data: AuthDto): Promise<User> {
+  async signUp(data: AuthSignUpDto): Promise<User> {
+    const user =
+      (await this.getByUserName(data.username)) ||
+      (await this.getByEmail(data.email)) ||
+      (await this.getByPhone(data['regionCode'] || '+86', data.phone))
+    if (user) {
+      throw new BadRequestException('该用户已被注册')
+    }
+    // if data.phone exists, verify phone code
     const salt = this.passwordService.generateSalt()
     return await this.create({
-      email: data['email'],
+      email: data.email,
       regionCode: data['regionCode'] || '+86',
-      phone: data['phone'],
-      name: data['name'] || data['username'],
+      phone: data.phone,
+      name: data.username,
       salt,
       password: await this.passwordService.hashPassword(
         data['password'] ||
@@ -97,6 +119,7 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
         name: defaultUserName,
         roles,
         salt,
+        phone: '13800138000',
         password: await this.passwordService.hashPassword(
           this.configService.get('DEFAULT_USER_PASSWORD'),
           salt,

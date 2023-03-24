@@ -56,7 +56,7 @@ export class AuthPhoneCodeStrategy extends PassportStrategy(
     { regionCode, phone }: SmsDto,
     code: string,
   ): Promise<boolean> {
-    const key = `phone:${regionCode}${phone}:code`
+    const key = `phone:${regionCode || '+86'}${phone}:code`
     const cacheCode = await this.cacheManager.get<string>(key)
     if (cacheCode === code) {
       await this.cacheManager.del(key)

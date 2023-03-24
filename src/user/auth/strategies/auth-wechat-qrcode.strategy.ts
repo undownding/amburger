@@ -25,6 +25,7 @@ export class WechatUserInfo {
   openid: string
   nickname: string
   unionid: string
+  errcode?: number
 }
 
 @Injectable()
@@ -73,8 +74,10 @@ export class AuthWechatQrCodeStrategy extends PassportStrategy(
           },
         }),
       ),
-    ).catch(() => null)
-    if (!wechatUser) {
+    )
+      .catch(() => null)
+      .then((res) => res.data)
+    if (!wechatUser || wechatUser.errcode) {
       return null
     }
     const user = await this.userService.getByUnionId(wechatUser.unionid)

@@ -8,6 +8,7 @@ import { Cache } from 'cache-manager'
 import { SmsDto } from '@/sms/sms.dto'
 import { BaseSmsService } from '@/sms/base-sms-service'
 import { SMS_SERVICE } from '@/sms/sms.constants'
+import * as process from 'process'
 
 @Injectable()
 export class SmsProxyService extends BaseSmsService {
@@ -25,7 +26,9 @@ export class SmsProxyService extends BaseSmsService {
     const regionCode = body.regionCode || '+86'
     const phone = body.phone
     const key = `phone:countdown:${regionCode}${phone}`
-    const isCd = await this.cacheManager.get<boolean>(key)
+    const isCd =
+      process.env.NODE_ENV !== 'test' &&
+      (await this.cacheManager.get<boolean>(key))
     if (isCd) throw new ConflictException('短信冷却中')
     await this.smsService.sendCode(body, code)
     await this.cacheManager.set(key, true, 60)
