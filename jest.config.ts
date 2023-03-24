@@ -38,7 +38,8 @@ const jestConfig: JestConfigWithTsJest = {
   coverageReporters: [
     "text",
     "lcov",
-    "clover"
+    "clover",
+    "cobertura"
   ],
 
   // An object that configures minimum threshold enforcement for coverage results
