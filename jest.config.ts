@@ -2,7 +2,7 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
  */
-import type { JestConfigWithTsJest } from 'ts-jest'
+import type { JestConfigWithTsJest } from "ts-jest";
 
 const jestConfig: JestConfigWithTsJest = {
   // All imported modules in your tests should be mocked automatically
@@ -81,7 +81,7 @@ const jestConfig: JestConfigWithTsJest = {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -115,7 +115,7 @@ const jestConfig: JestConfigWithTsJest = {
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
-  rootDir: 'src',
+  rootDir: '.',
 
   // A list of paths to directories that Jest should use to search for files in
   roots: ['<rootDir>'],
@@ -156,7 +156,7 @@ const jestConfig: JestConfigWithTsJest = {
   // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
-  testRegex: '.*\\.spec\\.ts$',
+  testRegex: '.*\\.(spec|e2e-spec)\\.ts$',
 
   // This option allows the use of a custom results processor
   // testResultsProcessor: undefined,
