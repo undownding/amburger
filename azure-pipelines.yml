@@ -26,7 +26,7 @@ jobs:
         displayName: 'Lint'
 
       - script: |
-          npm run test:azure
+          npm run test:cov
         displayName: 'Test and generate coverage report'
 
       #publish the tests results

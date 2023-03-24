@@ -24,7 +24,7 @@ const jestConfig: JestConfigWithTsJest = {
   collectCoverageFrom: ['**/*.(t|j)s'],
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: '../coverage',
+  coverageDirectory: './coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -35,12 +35,11 @@ const jestConfig: JestConfigWithTsJest = {
   coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
-  // coverageReporters: [
-  //   "json",
-  //   "text",
-  //   "lcov",
-  //   "clover"
-  // ],
+  coverageReporters: [
+    "text",
+    "lcov",
+    "clover"
+  ],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -100,7 +99,7 @@ const jestConfig: JestConfigWithTsJest = {
   // projects: undefined,
 
   // Use this configuration option to add custom reporters to Jest
-  // reporters: undefined,
+  reporters: ['jest-junit'],
 
   // Automatically reset mock state before every test
   // resetMocks: false,
