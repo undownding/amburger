@@ -97,7 +97,7 @@ jobs:
       - script: "docker pull node:19"
         displayName: Pull base image
 
-      - script: "docker pull registry.cn-hangzhou.aliyuncs.com/$(imageName):latest"
+      - script: "docker pull ${registry}/$(imageName):latest"
         displayName: Pull latest for layer caching
         continueOnError: true # for first build, no cache
 
@@ -108,7 +108,7 @@ jobs:
           command: build
           Dockerfile: Dockerfile
           containerRegistry: AliyunContainerRegistry
-          arguments: '--cache-from=registry.cn-hangzhou.aliyuncs.com/$(imageName):latest'
+          arguments: '--cache-from=${registry}/$(imageName):latest'
           tags: latest
 
       - task: Docker@2
