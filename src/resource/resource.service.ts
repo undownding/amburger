@@ -15,6 +15,7 @@ import {
 } from '@/resource/resource.dto'
 import { Permission, Permissions } from '@/permission/permission.entity'
 import { InjectRepository } from '@nestjs/typeorm'
+import { PermissionService } from '@/permission/permission.service'
 
 @Injectable()
 export class ResourceService extends BaseCrudService<Resource> {
@@ -41,8 +42,7 @@ export class ResourceService extends BaseCrudService<Resource> {
   constructor(
     @InjectRepository(Resource)
     private readonly repository: Repository<Resource>,
-    @InjectRepository(Permission)
-    private readonly permissionRepository: Repository<Permission>,
+    private readonly permissionService: PermissionService,
     private readonly userService: UserService,
   ) {
     super(repository)
@@ -142,18 +142,16 @@ export class ResourceService extends BaseCrudService<Resource> {
     if (resource.assigners.map((u) => u.id).includes(userId)) {
       throw new BadRequestException('用户已经是资源的协作者')
     }
-    await this.permissionRepository.save(
-      this.permissionRepository.create({
-        permission,
-        user,
-        userId: user.id,
-        resource,
-        resourceId: resource.id,
-      }),
-    )
+    await this.permissionService.create({
+      permission,
+      user,
+      userId: user.id,
+      resource,
+      resourceId: resource.id,
+    })
     resource.assigners.push(user)
     await this.repository.save(resource)
-    return this.permissionRepository.find({ where: { resourceId: id } })
+    return this.permissionService.find({ where: { resourceId: id } })
   }
 
   async removeAssigner(
@@ -172,13 +170,13 @@ export class ResourceService extends BaseCrudService<Resource> {
     if (!canBeRemove || operatorId !== userId) {
       throw new ForbiddenException('无权执行此操作')
     }
-    await this.permissionRepository.delete({
+    await this.permissionService.delete({
       userId,
       resourceId: resource.id,
     })
     resource.assigners = resource.assigners.filter((u) => u.id !== userId)
     await this.repository.save(resource)
-    return this.permissionRepository.find({ where: { resourceId: id } })
+    return this.permissionService.find({ where: { resourceId: id } })
   }
 
   async updateAssigner(
@@ -200,11 +198,11 @@ export class ResourceService extends BaseCrudService<Resource> {
     if (!canBeUpdate) {
       throw new ForbiddenException('无权执行此操作')
     }
-    await this.permissionRepository.update(
+    await this.permissionService.update(
       { userId, resourceId: resource.id },
       { permission },
     )
-    return this.permissionRepository.find({ where: { resourceId: id } })
+    return this.permissionService.find({ where: { resourceId: id } })
   }
 
   async getByUser(

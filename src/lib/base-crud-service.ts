@@ -54,6 +54,10 @@ export class BaseCrudService<T extends BaseEntity> {
     return this.baseRepository.findOne(options)
   }
 
+  public async find(options?: FindManyOptions): Promise<T[]> {
+    return this.baseRepository.find(options)
+  }
+
   public async findAll(): Promise<T[]> {
     return this.baseRepository.find()
   }
@@ -76,9 +80,12 @@ export class BaseCrudService<T extends BaseEntity> {
       .then(([data, count]) => ({ data, count }))
   }
 
-  public async update(id: IDType, data: Partial<T>): Promise<T> {
+  public async update(
+    criteria: IDType | FindOptionsWhere<T>,
+    data: Partial<T>,
+  ): Promise<T> {
     return this.baseRepository
-      .update(id, data as object)
+      .update(criteria, data as object)
       .then((response) => response.raw[0])
   }
 
