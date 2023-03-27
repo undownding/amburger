@@ -14,6 +14,7 @@ import {
   ResourceUpdateDto,
 } from '@/resource/resource.dto'
 import { Permission, Permissions } from '@/permission/permission.entity'
+import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()
 export class ResourceService extends BaseCrudService<Resource> {

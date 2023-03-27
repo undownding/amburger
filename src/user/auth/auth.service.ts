@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt'
 import { nanoid } from 'nanoid'
 import { IToken, TokenType } from '@/user/auth/auth.decorator'
 import { IDType } from '@/lib/base-crud-service'
+import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()
 export class AuthService {

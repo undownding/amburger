@@ -4,6 +4,7 @@ import { randomBytes } from 'crypto'
 import * as randomstring from 'randomstring'
 import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()
 export class PasswordService {

@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config'
 import { PasswordService } from '@/user/auth/password.service'
 import { AuthSignUpDto } from '@/user/auth/auth.dto'
 import * as randomstring from 'randomstring'
+import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()
 export class UserService extends BaseCrudService<User> implements OnModuleInit {
