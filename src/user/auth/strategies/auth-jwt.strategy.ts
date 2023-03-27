@@ -23,7 +23,7 @@ export class AuthJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public async validate(payload: IToken): Promise<object> {
+  public async validate(payload: IToken): Promise<IToken> {
     if (payload.type !== 'access_token') {
       throw new BadRequestException('token 类型无效')
     }

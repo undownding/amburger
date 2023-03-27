@@ -20,6 +20,8 @@ import { AuthEmailPasswordStrategy } from '@/user/auth/strategies/auth-email-pas
 import { HttpModule } from '@nestjs/axios'
 import { AuthWechatQrCodeStrategy } from '@/user/auth/strategies/auth-wechat-qrcode.strategy'
 import { AuthRefreshTokenStrategy } from '@/user/auth/strategies/auth-refresh-token.strategy'
+import { EmptyUserStrategy } from '@/user/auth/strategies/empty-user.strategy'
+import { OptionalAuthGuard } from '@/user/auth/guards/optional-auth.guard'
 
 @Module({
   imports: [
@@ -47,6 +49,8 @@ import { AuthRefreshTokenStrategy } from '@/user/auth/strategies/auth-refresh-to
     PasswordService,
     JwtGuard,
     RolesGuard,
+    EmptyUserStrategy,
+    OptionalAuthGuard,
   ],
   controllers: [UserController, AuthController],
   exports: [UserService, AuthService, RoleService],

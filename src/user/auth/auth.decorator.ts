@@ -9,6 +9,7 @@ import { ApiCookieAuth, ApiResponse } from '@nestjs/swagger'
 import { JwtGuard } from '@/user/auth/guards/auth-jwt.guard'
 import { LocalAuthGuard } from '@/user/auth/guards/local-auth.guard'
 import { AuthGuard } from '@nestjs/passport'
+import { OptionalAuthGuard } from '@/user/auth/guards/optional-auth.guard'
 
 export type TokenType = 'access_token' | 'refresh_token'
 
@@ -60,4 +61,8 @@ export const TryAuth: () => MethodDecorator & ClassDecorator = () => {
     UseGuards(LocalAuthGuard),
     ApiResponse({ status: 401, description: '所有登录方式均未通过' }),
   )
+}
+
+export const OptionalLogin: () => MethodDecorator & ClassDecorator = () => {
+  return applyDecorators(UseGuards(OptionalAuthGuard))
 }
