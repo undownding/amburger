@@ -14,7 +14,7 @@ import { BaseEntity } from '@/lib/base-entity'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IDType } from '@/lib/base-crud-service'
 import { ulid } from 'ulidx'
-import { JsonColumn, PointColumn } from '@/lib/typeorm-ext'
+import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext'
 import { User } from '@/user/user.entity'
 import heredoc from 'tsheredoc'
 import { Permission } from '@/permission/permission.entity'
@@ -120,6 +120,17 @@ export class Resource extends BaseEntity {
     ],
   })
   permissions: Permission[]
+
+  @BooleanColumn({ default: true })
+  @ApiPropertyOptional({
+    description: heredoc`
+    该资源是否公开，公开的资源可以被任何人访问。
+    
+    默认为 true
+    `,
+    example: true,
+  })
+  isPublic: boolean
 
   @BeforeInsert()
   setId() {
