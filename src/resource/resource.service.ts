@@ -38,6 +38,9 @@ export class ResourceService extends BaseCrudService<Resource> {
       { permissions: [Permissions.MANAGE, Permissions.WRITEABLE] },
     )
   })
+  private readonly isPublic = new Brackets((qb) => {
+    qb.where('resource.isPublic = true')
+  })
 
   constructor(
     @InjectRepository(Resource)
@@ -83,14 +86,25 @@ export class ResourceService extends BaseCrudService<Resource> {
       .then((count) => count > 0)
   }
 
-  override async getById(id: IDType): Promise<Resource> {
-    return this.repository
+  override async getById(id: IDType, operatorId?: IDType): Promise<Resource> {
+    const queryBuilder = this.repository
       .createQueryBuilder('resource')
-      .where('resource.id = :id', { id })
+      .where('resource.id = :id', { id, userId: operatorId })
       .leftJoinAndSelect('resource.owner', 'owner')
       .leftJoinAndSelect('resource.permissions', 'permissions')
       .leftJoinAndSelect('resource.assigners', 'assigners')
-      .getOne()
+
+    queryBuilder.andWhere(
+      operatorId
+        ? new Brackets((qb) => {
+            qb.where(this.isOwnerBracket)
+              .orWhere(this.isAssigner)
+              .orWhere(this.isPublic)
+          })
+        : this.isPublic,
+    )
+
+    return queryBuilder.getOne()
   }
 
   override async update(
@@ -208,31 +222,41 @@ export class ResourceService extends BaseCrudService<Resource> {
   async getByUser(
     query: ResourceSearchQuery,
     userId: IDType,
+    operatorId: IDType,
   ): Promise<ResourceSearchResDto> {
     const { skip, limit } = query
 
-    let brackets: Brackets
+    let ownerBrackets: Brackets
 
     if (query.isOwner && query.isAssigner) {
-      brackets = new Brackets((qb) => {
+      ownerBrackets = new Brackets((qb) => {
         qb.where(this.isOwnerBracket).orWhere(this.isAssigner)
       })
     } else if (query.isOwner && query.isAssigner !== true) {
-      brackets = this.isOwnerBracket
+      ownerBrackets = this.isOwnerBracket
     } else if (query.isAssigner && query.isOwner !== true) {
-      brackets = this.isAssigner
+      ownerBrackets = this.isAssigner
     } else {
       // 两个参数都没传，默认行为两个都查
-      brackets = new Brackets((qb) => {
+      ownerBrackets = new Brackets((qb) => {
         qb.where(this.isOwnerBracket).orWhere(this.isAssigner)
       })
     }
 
+    const operatorBrackets: Brackets = operatorId
+      ? new Brackets((qb) =>
+          qb
+            .where(this.isPublic)
+            .orWhere((qb) => qb.where('owner.id = :operatorId'))
+            .orWhere((qb) => qb.where('permissions.userId = :operatorId')),
+        )
+      : new Brackets((qb) => qb.where(this.isPublic))
+
     return this.repository
       .createQueryBuilder('resource')
       .leftJoinAndSelect('resource.owner', 'owner')
-      .where('resource.ownerId = :userId', { userId })
-      .andWhere(brackets)
+      .where(ownerBrackets, { userId, operatorId })
+      .andWhere(operatorBrackets)
       .skip(skip)
       .limit(limit)
       .getManyAndCount()

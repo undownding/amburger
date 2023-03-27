@@ -19,7 +19,12 @@ import {
   ResourceSearchResDto,
   ResourceUpdateDto,
 } from '@/resource/resource.dto'
-import { IToken, Me, NeedLogin } from '@/user/auth/auth.decorator'
+import {
+  IToken,
+  Me,
+  NeedLogin,
+  OptionalLogin,
+} from '@/user/auth/auth.decorator'
 import { UserService } from '@/user/user.service'
 import { Permission } from '@/permission/permission.entity'
 import heredoc from 'tsheredoc'
@@ -36,8 +41,9 @@ export class ResourceController {
   @ApiOkResponse({ type: Resource })
   @ApiParam({ name: 'id', description: '资源 id' })
   @ApiSummary('根据 id 获取资源')
-  async getById(@Param('id') id: IDType): Promise<Resource> {
-    return this.resourceService.getById(id)
+  @OptionalLogin()
+  async getById(@Param('id') id: IDType, @Me() me: IToken): Promise<Resource> {
+    return this.resourceService.getById(id, me.id)
   }
 
   @Get()
@@ -59,7 +65,7 @@ export class ResourceController {
     @Query() query: ResourceSearchQuery,
     @Me() me: IToken,
   ): Promise<ResourceSearchResDto> {
-    return this.resourceService.getByUser(query, me.id)
+    return this.resourceService.getByUser(query, me.id, me.id)
   }
 
   @Post()
