@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   BeforeInsert,
   BeforeUpdate,
   Column,
@@ -11,6 +10,7 @@ import { User } from '@/user/user.entity'
 import { Resource } from '@/resource/resource.entity'
 import { IDType } from '@/lib/base-crud-service'
 import { ApiProperty } from '@nestjs/swagger'
+import { BaseEntity } from '@/lib/base-entity'
 
 export enum Permissions {
   READ_ONLY = 'READ_ONLY',

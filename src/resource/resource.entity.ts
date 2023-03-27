@@ -17,7 +17,7 @@ import { ulid } from 'ulidx'
 import { JsonColumn, PointColumn } from '@/lib/typeorm-ext'
 import { User } from '@/user/user.entity'
 import heredoc from 'tsheredoc'
-import { Permission } from '@/resource/permission.entity'
+import { Permission } from '@/permission/permission.entity'
 
 @Entity(RESOURCE_NAME, { name: RESOURCE_NAME, orderBy: { createdAt: 'ASC' } })
 export class Resource extends BaseEntity {

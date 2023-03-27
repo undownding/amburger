@@ -5,7 +5,7 @@ import {
   PickType,
 } from '@nestjs/swagger'
 import { Resource } from './resource.entity'
-import { Permission } from '@/resource/permission.entity'
+import { Permission } from '@/permission/permission.entity'
 import { IsBoolean, IsOptional } from 'class-validator'
 import { Paged, PagedDto } from '@/lib/base-crud-service'
 

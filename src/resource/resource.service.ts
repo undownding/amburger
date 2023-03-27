@@ -1,21 +1,19 @@
 import {
   BadRequestException,
   ForbiddenException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
 import { BaseCrudService, IDType } from '@/lib/base-crud-service'
 import { Resource } from './resource.entity'
 import { Brackets, Repository } from 'typeorm'
-import { getRepositoryToken } from '@nestjs/typeorm'
 import { UserService } from '@/user/user.service'
 import {
   ResourceSearchQuery,
   ResourceSearchResDto,
   ResourceUpdateDto,
 } from '@/resource/resource.dto'
-import { Permission, Permissions } from '@/resource/permission.entity'
+import { Permission, Permissions } from '@/permission/permission.entity'
 
 @Injectable()
 export class ResourceService extends BaseCrudService<Resource> {
@@ -40,9 +38,9 @@ export class ResourceService extends BaseCrudService<Resource> {
   })
 
   constructor(
-    @Inject(getRepositoryToken(Resource))
+    @InjectRepository(Resource)
     private readonly repository: Repository<Resource>,
-    @Inject(getRepositoryToken(Permission))
+    @InjectRepository(Permission)
     private readonly permissionRepository: Repository<Permission>,
     private readonly userService: UserService,
   ) {

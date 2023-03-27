@@ -1,17 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import * as argon2 from 'argon2'
 import { randomBytes } from 'crypto'
 import * as randomstring from 'randomstring'
 import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
-import { getRepositoryToken } from '@nestjs/typeorm'
 
 @Injectable()
 export class PasswordService {
   private readonly SALT_LEN = 16
 
   constructor(
-    @Inject(getRepositoryToken(User))
+    @InjectRepository(User)
     private readonly repository: Repository<User>,
   ) {}
 

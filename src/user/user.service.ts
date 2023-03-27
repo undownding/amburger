@@ -1,15 +1,9 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  OnModuleInit,
-} from '@nestjs/common'
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common'
 import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
 import { BaseCrudService, IDType } from '@/lib/base-crud-service'
 import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
-import { getRepositoryToken } from '@nestjs/typeorm'
 import { ConfigService } from '@nestjs/config'
 import { PasswordService } from '@/user/auth/password.service'
 import { AuthSignUpDto } from '@/user/auth/auth.dto'
@@ -20,7 +14,7 @@ export class UserService extends BaseCrudService<User> implements OnModuleInit {
   constructor(
     private readonly roleService: RoleService,
     private readonly authService: AuthService,
-    @Inject(getRepositoryToken(User))
+    @InjectRepository(User)
     private readonly repository: Repository<User>,
     private readonly configService: ConfigService,
     private readonly passwordService: PasswordService,

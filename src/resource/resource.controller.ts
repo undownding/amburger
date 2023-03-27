@@ -21,7 +21,7 @@ import {
 } from '@/resource/resource.dto'
 import { IToken, Me, NeedLogin } from '@/user/auth/auth.decorator'
 import { UserService } from '@/user/user.service'
-import { Permission } from '@/resource/permission.entity'
+import { Permission } from '@/permission/permission.entity'
 import heredoc from 'tsheredoc'
 
 @Controller(RESOURCE_NAME)

@@ -1,8 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
 import * as argon2 from 'argon2'
-import { getRepositoryToken } from '@nestjs/typeorm'
 import { JwtService } from '@nestjs/jwt'
 import { nanoid } from 'nanoid'
 import { IToken, TokenType } from '@/user/auth/auth.decorator'
@@ -11,7 +10,7 @@ import { IDType } from '@/lib/base-crud-service'
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(getRepositoryToken(User))
+    @InjectRepository(User)
     private readonly repository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
