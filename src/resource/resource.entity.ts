@@ -19,7 +19,7 @@ import { User } from '@/user/user.entity'
 import heredoc from 'tsheredoc'
 import { Permission } from '@/resource/permission.entity'
 
-@Entity({ name: RESOURCE_NAME, orderBy: { createdAt: 'ASC' } })
+@Entity(RESOURCE_NAME, { name: RESOURCE_NAME, orderBy: { createdAt: 'ASC' } })
 export class Resource extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 26 })
   @ApiProperty({
