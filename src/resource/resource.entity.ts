@@ -3,6 +3,8 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -96,15 +98,18 @@ export class Resource extends BaseEntity {
   @ApiProperty({
     description: '该资源的持有人, 拥有对该资源的最大权限',
   })
+  @JoinColumn()
   owner: User
 
   @ManyToMany(() => User)
   @ApiPropertyOptional({
     description: '该资源的协作者，该字段用于"我参与协作的项目"查询',
   })
+  @JoinTable()
   assigners: User[]
 
   @OneToMany(() => Permission, (permission) => permission.resource)
+  @JoinTable()
   @ApiPropertyOptional({
     description: '该资源协作者的权限，原则上应与 assigners 等长',
     example: [

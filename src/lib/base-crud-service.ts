@@ -89,8 +89,8 @@ export class BaseCrudService<T extends BaseEntity> {
       .then((response) => response.raw[0])
   }
 
-  public async count(where?: FindManyOptions<T>): Promise<number> {
-    return this.baseRepository.count(where)
+  public async count(options?: FindManyOptions<T>): Promise<number> {
+    return this.baseRepository.count(options)
   }
 
   public async delete(criteria: FindOptionsWhere<T> | IDType): Promise<void> {

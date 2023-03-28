@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { BaseCrudService, IDType } from '@/lib/base-crud-service'
 import { Resource } from './resource.entity'
-import { Brackets, Repository } from 'typeorm'
+import { Brackets, In, Repository } from 'typeorm'
 import { UserService } from '@/user/user.service'
 import {
   ResourceSearchQuery,
@@ -16,6 +16,7 @@ import {
 import { Permission, Permissions } from '@/permission/permission.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { PermissionService } from '@/permission/permission.service'
+import { DeepPartial } from 'typeorm/common/DeepPartial'
 
 @Injectable()
 export class ResourceService extends BaseCrudService<Resource> {
@@ -34,7 +35,7 @@ export class ResourceService extends BaseCrudService<Resource> {
   })
   private readonly isWriteableAssigner = new Brackets((qb) => {
     qb.where('permissions.userId = :userId').andWhere(
-      'permissions.permission in :permissions',
+      'permissions.permission in (:...permissions)',
       { permissions: [Permissions.MANAGE, Permissions.WRITEABLE] },
     )
   })
@@ -53,14 +54,21 @@ export class ResourceService extends BaseCrudService<Resource> {
 
   private async canModify(id: IDType, userId: IDType): Promise<boolean> {
     return this.repository
-      .createQueryBuilder('resource')
-      .leftJoinAndSelect('resource.owner', 'owner')
-      .leftJoinAndSelect('resource.permissions', 'permissions')
-      .where('resource.id = :id', { id, userId })
-      .andWhere((qb) =>
-        qb.where(this.isOwnerBracket).orWhere(this.isWriteableAssigner),
-      )
-      .getCount()
+      .count({
+        where: [
+          {
+            id,
+            owner: { id: userId },
+          },
+          {
+            id,
+            permissions: {
+              userId,
+              permission: In([Permissions.MANAGE, Permissions.WRITEABLE]),
+            },
+          },
+        ],
+      })
       .then((count) => count > 0)
   }
 
@@ -84,6 +92,18 @@ export class ResourceService extends BaseCrudService<Resource> {
       .andWhere((qb) => qb.where(this.isOwnerBracket).orWhere(this.isManager))
       .getCount()
       .then((count) => count > 0)
+  }
+
+  async create(
+    data: DeepPartial<Resource>,
+    ownerId?: string,
+  ): Promise<Resource> {
+    const user = await this.userService.getById(ownerId)
+
+    const resource = this.repository.create(data)
+    resource.owner = user
+    await this.repository.save(resource)
+    return resource
   }
 
   override async getById(id: IDType, operatorId?: IDType): Promise<Resource> {
@@ -113,9 +133,10 @@ export class ResourceService extends BaseCrudService<Resource> {
     userId?: IDType,
   ): Promise<Resource> {
     // 判断权限，没问题再调用 super
-    const available = await this.canModify(id, userId)
+    const available = await this.isOwner(id, userId)
     if (available) {
-      return super.update(id, data)
+      await super.update(id, data)
+      return this.getById(id, userId)
     } else {
       throw new ForbiddenException('无权更改此资源')
     }
@@ -247,16 +268,21 @@ export class ResourceService extends BaseCrudService<Resource> {
       ? new Brackets((qb) =>
           qb
             .where(this.isPublic)
-            .orWhere((qb) => qb.where('owner.id = :operatorId'))
-            .orWhere((qb) => qb.where('permissions.userId = :operatorId')),
+            .orWhere(new Brackets((qb) => qb.where('owner.id = :operatorId')))
+            .orWhere(
+              new Brackets((qb) =>
+                qb.where('permissions.userId = :operatorId'),
+              ),
+            ),
         )
       : new Brackets((qb) => qb.where(this.isPublic))
 
     return this.repository
       .createQueryBuilder('resource')
       .leftJoinAndSelect('resource.owner', 'owner')
+      .leftJoinAndSelect('resource.permissions', 'permissions')
       .where(ownerBrackets, { userId, operatorId })
-      .andWhere(operatorBrackets)
+      .orWhere(operatorBrackets)
       .skip(skip)
       .limit(limit)
       .getManyAndCount()

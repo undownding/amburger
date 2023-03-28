@@ -2,7 +2,7 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
  */
-import type { JestConfigWithTsJest } from "ts-jest";
+import type { JestConfigWithTsJest } from 'ts-jest'
 
 const jestConfig: JestConfigWithTsJest = {
   // All imported modules in your tests should be mocked automatically
@@ -35,12 +35,7 @@ const jestConfig: JestConfigWithTsJest = {
   coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
-  coverageReporters: [
-    "text",
-    "lcov",
-    "clover",
-    "cobertura"
-  ],
+  coverageReporters: ['text', 'lcov', 'clover', 'cobertura'],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common'
@@ -76,11 +77,10 @@ export class ResourceController {
     @Body() body: ResourceUpdateDto,
     @Me() me: IToken,
   ): Promise<Resource> {
-    const owner = await this.userService.getById(me.id)
-    return this.resourceService.create({ ...body, owner })
+    return this.resourceService.create(body, me.id)
   }
 
-  @Post(':id')
+  @Patch(':id')
   @ApiOkResponse({ type: Resource })
   @ApiParam({ name: 'id', description: '资源 id' })
   @ApiSummary('更新资源')
