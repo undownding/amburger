@@ -6,7 +6,7 @@ import { typeOrmModuleOptions } from '@/lib/data-source'
 import { ConfigModule } from '@nestjs/config'
 import { UserModule } from '@/user/user.module'
 import { CacheModule } from '@nestjs/common'
-import { PermissionModule } from '@/permission/permission.module'
+import { AssignerModule } from '@/resource/assigner/assigner.module'
 
 describe('ResourceService', () => {
   let service: ResourceService
@@ -14,7 +14,7 @@ describe('ResourceService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        PermissionModule,
+        AssignerModule,
         ConfigModule.forRoot({
           isGlobal: true,
         }),

@@ -5,7 +5,6 @@ import {
   Index,
   JoinColumn,
   JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   Point,
@@ -19,7 +18,7 @@ import { ulid } from 'ulidx'
 import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext'
 import { User } from '@/user/user.entity'
 import heredoc from 'tsheredoc'
-import { Permission } from '@/permission/permission.entity'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
 
 @Entity({ name: RESOURCE_NAME, orderBy: { id: 'ASC' } })
 export class Resource extends BaseEntity {
@@ -105,30 +104,15 @@ export class Resource extends BaseEntity {
   @JoinColumn()
   owner: User
 
-  @ManyToMany(() => User)
+  @OneToMany(() => Assigner, (assigner) => assigner.resource, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   @ApiPropertyOptional({
-    description: `该${RESOURCE_DISPLAY_NAME}的协作者，该字段用于"我参与协作的项目"查询`,
+    description: `该${RESOURCE_DISPLAY_NAME}的协作者`,
   })
   @JoinTable()
-  assigners: User[]
-
-  @OneToMany(() => Permission, (permission) => permission.resource)
-  @JoinTable()
-  @ApiPropertyOptional({
-    description: `该${RESOURCE_DISPLAY_NAME}协作者的权限，原则上应与 assigners 等长`,
-    example: [
-      {
-        permission: 'READ_ONLY',
-        user: {
-          id: '9r8-1fn0Vk',
-          name: 'admin',
-          nickname: 'admin',
-          avatarUrl: 'https://example.com/avatar.png',
-        },
-      },
-    ],
-  })
-  permissions: Permission[]
+  assigners: Assigner[]
 
   @BooleanColumn({ default: true })
   @ApiPropertyOptional({

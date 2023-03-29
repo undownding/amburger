@@ -5,9 +5,9 @@ import {
   PickType,
 } from '@nestjs/swagger'
 import { Resource } from './resource.entity'
-import { Permission } from '@/permission/permission.entity'
 import { IsBoolean, IsOptional } from 'class-validator'
 import { Paged, PagedDto } from '@/lib/base-crud-service'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
 
 export class ResourceUpdateDto extends OmitType(Resource, [
   'id',
@@ -15,14 +15,16 @@ export class ResourceUpdateDto extends OmitType(Resource, [
   'type',
   'owner',
   'assigners',
-  'permissions',
   'setId',
 ]) {}
 
-export class PermissionUpdateDto extends PickType(Permission, [
-  'userId',
-  'permission',
-]) {}
+export class AssignerUpdateDto extends PickType(Assigner, ['permission']) {
+  @ApiProperty({
+    example: '9r8-1fn0Vk',
+    description: '用户ID',
+  })
+  userId: string
+}
 
 export class ResourceSearchQuery extends PagedDto {
   @ApiPropertyOptional() @IsOptional() @IsBoolean() isOwner?: boolean

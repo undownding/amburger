@@ -1,29 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { PermissionService } from './permission.service'
+import { AssignerService } from './assigner.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { typeOrmModuleOptions } from '@/lib/data-source'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
 import { ConfigModule } from '@nestjs/config'
-import { Permission } from './permission.entity'
 import { User } from '@/user/user.entity'
-import { Role } from '@/user/role/role.entity'
 import { Resource } from '@/resource/resource.entity'
+import { Role } from '@/user/role/role.entity'
 
-describe('PermissionService', () => {
-  let service: PermissionService
+describe('AssignerService', () => {
+  let service: AssignerService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-        }),
         TypeOrmModule.forRoot(typeOrmModuleOptions),
-        TypeOrmModule.forFeature([Permission, User, Role, Resource]),
+        TypeOrmModule.forFeature([Assigner, User, Resource, Role]),
+        ConfigModule,
       ],
-      providers: [PermissionService],
+      providers: [AssignerService],
     }).compile()
 
-    service = module.get<PermissionService>(PermissionService)
+    service = module.get<AssignerService>(AssignerService)
   })
 
   it('should be defined', () => {

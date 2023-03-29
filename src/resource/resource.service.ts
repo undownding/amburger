@@ -13,10 +13,11 @@ import {
   ResourceSearchResDto,
   ResourceUpdateDto,
 } from '@/resource/resource.dto'
-import { Permission, Permissions } from '@/permission/permission.entity'
+import { Permissions } from './assigner/permission.enum'
 import { InjectRepository } from '@nestjs/typeorm'
-import { PermissionService } from '@/permission/permission.service'
 import { DeepPartial } from 'typeorm/common/DeepPartial'
+import { AssignerService } from '@/resource/assigner/assigner.service'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
 
 @Injectable()
 export class ResourceService extends BaseCrudService<Resource> {
@@ -25,17 +26,17 @@ export class ResourceService extends BaseCrudService<Resource> {
     qb.where('owner.id = :userId')
   })
   private readonly isManager = new Brackets((qb) => {
-    qb.where('permissions.userId = :userId').andWhere(
-      'permissions.permission = :permission',
+    qb.where('assigners.userId = :userId').andWhere(
+      'assigners.permission = :permission',
       { permission: Permissions.MANAGE },
     )
   })
   private readonly isAssigner = new Brackets((qb) => {
-    qb.where('permissions.userId = :userId')
+    qb.where('assigners.user.id = :userId')
   })
   private readonly isWriteableAssigner = new Brackets((qb) => {
-    qb.where('permissions.userId = :userId').andWhere(
-      'permissions.permission in (:...permissions)',
+    qb.where('assigners.user.id = :userId').andWhere(
+      'assigners.permission in (:...permissions)',
       { permissions: [Permissions.MANAGE, Permissions.WRITEABLE] },
     )
   })
@@ -46,7 +47,7 @@ export class ResourceService extends BaseCrudService<Resource> {
   constructor(
     @InjectRepository(Resource)
     private readonly repository: Repository<Resource>,
-    private readonly permissionService: PermissionService,
+    private readonly assignerService: AssignerService,
     private readonly userService: UserService,
   ) {
     super(repository)
@@ -62,8 +63,8 @@ export class ResourceService extends BaseCrudService<Resource> {
           },
           {
             id,
-            permissions: {
-              userId,
+            assigners: {
+              user: { id: userId },
               permission: In([Permissions.MANAGE, Permissions.WRITEABLE]),
             },
           },
@@ -76,7 +77,8 @@ export class ResourceService extends BaseCrudService<Resource> {
     return this.repository
       .createQueryBuilder('resource')
       .leftJoinAndSelect('resource.owner', 'owner')
-      .leftJoinAndSelect('resource.permissions', 'permissions')
+      .leftJoinAndSelect('resource.assigners', 'assigners')
+      .leftJoinAndSelect('assigners.user', 'user')
       .where('resource.id = :id', { id, userId })
       .andWhere(this.isOwnerBracket)
       .getCount()
@@ -87,7 +89,8 @@ export class ResourceService extends BaseCrudService<Resource> {
     return this.repository
       .createQueryBuilder('resource')
       .leftJoinAndSelect('resource.owner', 'owner')
-      .leftJoinAndSelect('resource.permissions', 'permissions')
+      .leftJoinAndSelect('resource.assigners', 'assigners')
+      .leftJoinAndSelect('assigners.user', 'user')
       .where('resource.id = :id', { id, userId })
       .andWhere((qb) => qb.where(this.isOwnerBracket).orWhere(this.isManager))
       .getCount()
@@ -111,8 +114,8 @@ export class ResourceService extends BaseCrudService<Resource> {
       .createQueryBuilder('resource')
       .where('resource.id = :id', { id, userId: operatorId })
       .leftJoinAndSelect('resource.owner', 'owner')
-      .leftJoinAndSelect('resource.permissions', 'permissions')
       .leftJoinAndSelect('resource.assigners', 'assigners')
+      .leftJoinAndSelect('assigners.user', 'user')
 
     queryBuilder.andWhere(
       operatorId
@@ -157,7 +160,7 @@ export class ResourceService extends BaseCrudService<Resource> {
     operatorId: IDType,
     userId: IDType,
     permission: Permissions,
-  ): Promise<Permission[]> {
+  ): Promise<Assigner[]> {
     const canBeInvite = await (permission === Permissions.MANAGE
       ? this.isOwner(id, operatorId)
       : this.isOwnerOrManager(id, operatorId))
@@ -177,23 +180,21 @@ export class ResourceService extends BaseCrudService<Resource> {
     if (resource.assigners.map((u) => u.id).includes(userId)) {
       throw new BadRequestException('用户已经是资源的协作者')
     }
-    await this.permissionService.create({
+    const assigner = await this.assignerService.create({
       permission,
       user,
-      userId: user.id,
       resource,
-      resourceId: resource.id,
     })
-    resource.assigners.push(user)
+    resource.assigners.push(assigner)
     await this.repository.save(resource)
-    return this.permissionService.find({ where: { resourceId: id } })
+    return this.assignerService.find({ where: { resourceId: id } })
   }
 
   async removeAssigner(
     id: IDType,
     operatorId: IDType,
     userId: IDType,
-  ): Promise<Permission[]> {
+  ): Promise<Assigner[]> {
     const resource = await this.getById(id)
     if (!resource) {
       throw new NotFoundException('资源未找到')
@@ -205,22 +206,22 @@ export class ResourceService extends BaseCrudService<Resource> {
     if (!canBeRemove || operatorId !== userId) {
       throw new ForbiddenException('无权执行此操作')
     }
-    await this.permissionService.delete({
-      userId,
-      resourceId: resource.id,
+    await this.assignerService.delete({
+      user: { id: userId },
+      resource: { id: resource.id },
     })
     resource.assigners = resource.assigners.filter((u) => u.id !== userId)
     await this.repository.save(resource)
-    return this.permissionService.find({ where: { resourceId: id } })
+    return this.assignerService.find({ where: { resourceId: id } })
   }
 
   async updateAssigner(
-    id: IDType,
+    resourceId: IDType,
     operatorId: IDType,
     userId: IDType,
     permission: Permissions,
-  ): Promise<Permission[]> {
-    const resource = await this.getById(id)
+  ): Promise<Assigner[]> {
+    const resource = await this.getById(resourceId)
     if (!resource) {
       throw new NotFoundException('资源未找到')
     }
@@ -228,16 +229,18 @@ export class ResourceService extends BaseCrudService<Resource> {
       throw new BadRequestException('不能修改资源的所有者')
     }
     const canBeUpdate = await (permission === Permissions.MANAGE
-      ? this.isOwner(id, userId)
-      : this.isOwnerOrManager(id, operatorId))
+      ? this.isOwner(resourceId, userId)
+      : this.isOwnerOrManager(resourceId, operatorId))
     if (!canBeUpdate) {
       throw new ForbiddenException('无权执行此操作')
     }
-    await this.permissionService.update(
-      { userId, resourceId: resource.id },
+    await this.assignerService.update(
+      { user: { id: userId }, resource: { id: resource.id } },
       { permission },
     )
-    return this.permissionService.find({ where: { resourceId: id } })
+    return this.assignerService.find({
+      where: { resource: { id: resourceId } },
+    })
   }
 
   async getByUser(
@@ -270,9 +273,7 @@ export class ResourceService extends BaseCrudService<Resource> {
             .where(this.isPublic)
             .orWhere(new Brackets((qb) => qb.where('owner.id = :operatorId')))
             .orWhere(
-              new Brackets((qb) =>
-                qb.where('permissions.userId = :operatorId'),
-              ),
+              new Brackets((qb) => qb.where('assigners.user.id = :operatorId')),
             ),
         )
       : new Brackets((qb) => qb.where(this.isPublic))
@@ -280,7 +281,8 @@ export class ResourceService extends BaseCrudService<Resource> {
     return this.repository
       .createQueryBuilder('resource')
       .leftJoinAndSelect('resource.owner', 'owner')
-      .leftJoinAndSelect('resource.permissions', 'permissions')
+      .leftJoinAndSelect('resource.assigners', 'assigners')
+      .leftJoinAndSelect('assigners.user', 'user')
       .where(ownerBrackets, { userId, operatorId })
       .orWhere(operatorBrackets)
       .skip(skip)

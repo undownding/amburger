@@ -4,10 +4,10 @@ import { ResourceController } from './resource.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Resource } from './resource.entity'
 import { UserModule } from '@/user/user.module'
-import { PermissionModule } from '@/permission/permission.module'
+import { AssignerModule } from './assigner/assigner.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Resource]), PermissionModule, UserModule],
+  imports: [TypeOrmModule.forFeature([Resource]), UserModule, AssignerModule],
   providers: [ResourceService],
   controllers: [ResourceController],
 })

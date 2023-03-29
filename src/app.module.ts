@@ -9,7 +9,7 @@ import { AdminModule } from './admin/admin.module'
 import { OssModule } from '@/oss/oss.module'
 import { SmsModule } from './sms/sms.module'
 import { ResourceModule } from './resource/resource.module'
-import { PermissionModule } from './permission/permission.module'
+import { AssignerModule } from '@/resource/assigner/assigner.module'
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { PermissionModule } from './permission/permission.module'
     OssModule,
     SmsModule,
     ResourceModule,
-    PermissionModule,
+    AssignerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

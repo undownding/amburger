@@ -15,7 +15,7 @@ import { ResourceService } from './resource.service'
 import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
 import { ApiSummary } from '@/lib/nestjs-ext'
 import {
-  PermissionUpdateDto,
+  AssignerUpdateDto,
   ResourceSearchQuery,
   ResourceSearchResDto,
   ResourceUpdateDto,
@@ -27,8 +27,8 @@ import {
   OptionalLogin,
 } from '@/user/auth/auth.decorator'
 import { UserService } from '@/user/user.service'
-import { Permission } from '@/permission/permission.entity'
 import heredoc from 'tsheredoc'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
 
 @Controller(RESOURCE_NAME)
 @ApiTags(RESOURCE_DISPLAY_NAME)
@@ -107,9 +107,9 @@ export class ResourceController {
   @NeedLogin()
   async addAssigner(
     @Param('id') id: IDType,
-    @Body() body: PermissionUpdateDto,
+    @Body() body: AssignerUpdateDto,
     @Me() me: IToken,
-  ): Promise<Permission[]> {
+  ): Promise<Assigner[]> {
     return this.resourceService.addAssigner(
       id,
       me.id,
@@ -127,7 +127,7 @@ export class ResourceController {
     @Param('id') id: IDType,
     @Param('userId') userId: IDType,
     @Me() me: IToken,
-  ): Promise<Permission[]> {
+  ): Promise<Assigner[]> {
     return this.resourceService.removeAssigner(id, me.id, userId)
   }
 
@@ -137,13 +137,13 @@ export class ResourceController {
   @ApiSummary('更新协作者权限')
   @NeedLogin()
   async updateAssigner(
-    @Param('id') id: IDType,
+    @Param('id') resourceId: IDType,
     @Param('userId') userId: IDType,
-    @Body() body: PermissionUpdateDto,
+    @Body() body: AssignerUpdateDto,
     @Me() me: IToken,
-  ): Promise<Permission[]> {
+  ): Promise<Assigner[]> {
     return this.resourceService.updateAssigner(
-      id,
+      resourceId,
       me.id,
       userId,
       body.permission,
