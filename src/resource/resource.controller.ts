@@ -12,14 +12,14 @@ import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Resource } from './resource.entity'
 import { IDType } from '@/lib/base-crud-service'
 import { ResourceService } from './resource.service'
-import { RESOURCE_NAME } from './resource.constant'
+import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
 import { ApiSummary } from '@/lib/nestjs-ext'
 import {
   PermissionUpdateDto,
   ResourceSearchQuery,
   ResourceSearchResDto,
   ResourceUpdateDto,
-} from '@/resource/resource.dto'
+} from './resource.dto'
 import {
   IToken,
   Me,
@@ -31,7 +31,7 @@ import { Permission } from '@/permission/permission.entity'
 import heredoc from 'tsheredoc'
 
 @Controller(RESOURCE_NAME)
-@ApiTags('资源')
+@ApiTags(RESOURCE_DISPLAY_NAME)
 export class ResourceController {
   constructor(
     private readonly resourceService: ResourceService,
@@ -40,8 +40,8 @@ export class ResourceController {
 
   @Get(':id')
   @ApiOkResponse({ type: Resource })
-  @ApiParam({ name: 'id', description: '资源 id' })
-  @ApiSummary('根据 id 获取资源')
+  @ApiParam({ name: 'id', description: `${RESOURCE_DISPLAY_NAME} id` })
+  @ApiSummary(`根据 id 获取${RESOURCE_DISPLAY_NAME}`)
   @OptionalLogin()
   async getById(@Param('id') id: IDType, @Me() me: IToken): Promise<Resource> {
     return this.resourceService.getById(id, me.id)
@@ -50,15 +50,15 @@ export class ResourceController {
   @Get()
   @ApiOkResponse({ type: ResourceSearchResDto })
   @ApiOperation({
-    summary: '获取用户的资源',
+    summary: `获取当前用户的${RESOURCE_DISPLAY_NAME}`,
     description: heredoc`
-    搜索跟当前用户有关联的资源
+    搜索跟当前用户有关联的${RESOURCE_DISPLAY_NAME}
     
     不带 query 参数：返回所有下列两项
     
-    只带 query.isOwner：返回所有属于该用户创建资源
+    只带 query.isOwner：返回所有属于该用户创建的${RESOURCE_DISPLAY_NAME}
     
-    只带 query.isAssigner：返回所有该用户作为协作者参与的资源
+    只带 query.isAssigner：返回所有该用户作为协作者参与的${RESOURCE_DISPLAY_NAME}
     `,
   })
   @NeedLogin()
@@ -71,7 +71,7 @@ export class ResourceController {
 
   @Post()
   @ApiOkResponse({ type: Resource })
-  @ApiSummary('创建资源')
+  @ApiSummary(`创建${RESOURCE_DISPLAY_NAME}`)
   @NeedLogin()
   async create(
     @Body() body: ResourceUpdateDto,
@@ -82,8 +82,8 @@ export class ResourceController {
 
   @Patch(':id')
   @ApiOkResponse({ type: Resource })
-  @ApiParam({ name: 'id', description: '资源 id' })
-  @ApiSummary('更新资源')
+  @ApiParam({ name: 'id', description: `${RESOURCE_DISPLAY_NAME} id` })
+  @ApiSummary(`更新${RESOURCE_DISPLAY_NAME}`)
   @NeedLogin()
   async update(
     @Param('id') id: IDType,
@@ -94,15 +94,15 @@ export class ResourceController {
   }
 
   @Delete(':id')
-  @ApiParam({ name: 'id', description: '资源 id' })
-  @ApiSummary('删除资源')
+  @ApiParam({ name: 'id', description: `${RESOURCE_DISPLAY_NAME} id` })
+  @ApiSummary(`根据 id 删除${RESOURCE_DISPLAY_NAME}`)
   @NeedLogin()
   async delete(@Param('id') id: IDType, @Me() me: IToken): Promise<void> {
     return this.resourceService.delete(id, me.id)
   }
 
   @Post(':id/assigners')
-  @ApiParam({ name: 'id', description: '资源 id' })
+  @ApiParam({ name: 'id', description: `${RESOURCE_DISPLAY_NAME} id` })
   @ApiSummary('添加协作者')
   @NeedLogin()
   async addAssigner(
@@ -119,9 +119,9 @@ export class ResourceController {
   }
 
   @Delete(':id/assigners/:userId')
-  @ApiParam({ name: 'id', description: '资源 id' })
+  @ApiParam({ name: 'id', description: `${RESOURCE_DISPLAY_NAME} id` })
   @ApiParam({ name: 'userId', description: '用户 id' })
-  @ApiSummary('删除协作者')
+  @ApiSummary('移除协作者')
   @NeedLogin()
   async removeAssigner(
     @Param('id') id: IDType,
@@ -132,7 +132,7 @@ export class ResourceController {
   }
 
   @Post(':id/assigners/:userId')
-  @ApiParam({ name: 'id', description: '资源 id' })
+  @ApiParam({ name: 'id', description: `${RESOURCE_DISPLAY_NAME} id` })
   @ApiParam({ name: 'userId', description: '用户 id' })
   @ApiSummary('更新协作者权限')
   @NeedLogin()

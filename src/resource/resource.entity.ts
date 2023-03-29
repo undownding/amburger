@@ -11,7 +11,7 @@ import {
   Point,
   PrimaryColumn,
 } from 'typeorm'
-import { RESOURCE_NAME } from './resource.constant'
+import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
 import { BaseEntity } from '@/lib/base-entity'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { IDType } from '@/lib/base-crud-service'
@@ -26,7 +26,7 @@ export class Resource extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 26 })
   @ApiProperty({
     example: '01FJ0V986RA01G70YQ5Z0AM0E7 ',
-    description: '资源 ID',
+    description: `${RESOURCE_DISPLAY_NAME} ID`,
   })
   id: IDType
 
@@ -35,7 +35,7 @@ export class Resource extends BaseEntity {
   @ApiProperty({
     example: 0,
     description: heredoc`
-    如有多种资源，则以该字段区分资源的类型。默认为0。
+    如有多种${RESOURCE_DISPLAY_NAME}，则以该字段区分${RESOURCE_DISPLAY_NAME}的类型。默认为0。
     
     取值范围为 0-127。
     `,
@@ -47,7 +47,7 @@ export class Resource extends BaseEntity {
   @ApiProperty({
     example: 0,
     description: heredoc`
-    如该资源需要追踪状态，使用此字段来追踪。默认为0。
+    如该${RESOURCE_DISPLAY_NAME}需要追踪状态，使用此字段来追踪。默认为0。
     
     取值范围为 0-32767
     `,
@@ -70,11 +70,15 @@ export class Resource extends BaseEntity {
   content?: string
 
   @Column({ type: 'simple-array', nullable: true })
-  @ApiPropertyOptional({ description: '如该资源存在预览图，使用该字段' })
+  @ApiPropertyOptional({
+    description: `如该${RESOURCE_DISPLAY_NAME}存在预览图，使用该字段`,
+  })
   previewImages?: string[]
 
   @Column({ type: 'simple-array', nullable: true })
-  @ApiPropertyOptional({ description: '如该资源存在附件，使用该字段' })
+  @ApiPropertyOptional({
+    description: `如该${RESOURCE_DISPLAY_NAME}存在附件，使用该字段`,
+  })
   attachments?: string[]
 
   @JsonColumn({ nullable: true })
@@ -96,14 +100,14 @@ export class Resource extends BaseEntity {
     onDelete: 'CASCADE',
   })
   @ApiProperty({
-    description: '该资源的持有人, 拥有对该资源的最大权限',
+    description: `该${RESOURCE_DISPLAY_NAME}的持有人, 拥有对该资源的最大权限`,
   })
   @JoinColumn()
   owner: User
 
   @ManyToMany(() => User)
   @ApiPropertyOptional({
-    description: '该资源的协作者，该字段用于"我参与协作的项目"查询',
+    description: `该${RESOURCE_DISPLAY_NAME}的协作者，该字段用于"我参与协作的项目"查询`,
   })
   @JoinTable()
   assigners: User[]
@@ -111,7 +115,7 @@ export class Resource extends BaseEntity {
   @OneToMany(() => Permission, (permission) => permission.resource)
   @JoinTable()
   @ApiPropertyOptional({
-    description: '该资源协作者的权限，原则上应与 assigners 等长',
+    description: `该${RESOURCE_DISPLAY_NAME}协作者的权限，原则上应与 assigners 等长`,
     example: [
       {
         permission: 'READ_ONLY',
@@ -129,7 +133,7 @@ export class Resource extends BaseEntity {
   @BooleanColumn({ default: true })
   @ApiPropertyOptional({
     description: heredoc`
-    该资源是否公开，公开的资源可以被任何人访问。
+    该${RESOURCE_DISPLAY_NAME}是否公开，公开的${RESOURCE_DISPLAY_NAME}可以被任何人访问。
     
     默认为 true
     `,
