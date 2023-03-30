@@ -72,10 +72,9 @@ jobs:
           java -version
           wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/$(jar_version)/swagger-codegen-cli-$(jar_version).jar -O swagger-codegen-cli.jar
           java -jar swagger-codegen-cli.jar generate \
-            -Dversion=$BUILD_BUILDNUMBER \
             -l typescript-axios \
             -i dist/swagger.json -o ./gen \
-            --additional-properties npmName=amburger-axios,npmDescription="OpenAPI client for Amburger"
+            --additional-properties npmVersion=$BUILD_BUILDNUMBER,npmName=amburger-axios,npmDescription="OpenAPI client for Amburger"
 
       - task: PublishPipelineArtifact@1
         inputs:
