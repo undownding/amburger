@@ -71,10 +71,13 @@ jobs:
       - script: |
           java -version
           wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/$(jar_version)/swagger-codegen-cli-$(jar_version).jar -O swagger-codegen-cli.jar
+          BUILD_NUMBER=$(echo ${$BUILD_BUILDNUMBER} | tr -d '.')
+          BUILD_NUMBER=$(echo ${BUILD_NUMBER} | tr -d '+')
+          BUILD_NUMBER="0.0.${BUILD_NUMBER}"
           java -jar swagger-codegen-cli.jar generate \
             -l typescript-axios \
             -i dist/swagger.json -o ./gen \
-            --additional-properties npmVersion=0.0.$BUILD_BUILDNUMBER,npmName=amburger-axios,npmDescription="OpenAPI client for Amburger"
+            --additional-properties npmVersion=0.0.$BUILD_NUMBER,npmName=amburger-axios,npmDescription="OpenAPI client for Amburger"
 
       - task: PublishPipelineArtifact@1
         inputs:
