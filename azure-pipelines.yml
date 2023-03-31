@@ -62,6 +62,16 @@ jobs:
           npx ts-node scripts/doc-gen.ts
         displayName: 'Generate swagger.json'
 
+      - script: |
+          sed -i 's/\"其他\"/other/g' dist/swagger.json
+          sed -i 's/\"用户\"/user/g' dist/swagger.json
+          sed -i 's/\"登录相关接口\"/auth/g' dist/swagger.json
+          sed -i 's/\"管理员\"/admin/g' dist/swagger.json
+          sed -i 's/\"OSS 接口\"/oss/g' dist/swagger.json
+          sed -i 's/\"短信\"/sms/g' dist/swagger.json
+          sed -i 's/\"资源\"/resource/g' dist/swagger.json
+        displayName: 'Replace tags in swagger.json'
+
       - task: JavaToolInstaller@0
         inputs:
           versionSpec: '11'
