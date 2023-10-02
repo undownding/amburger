@@ -87,7 +87,7 @@ jobs:
           java -jar swagger-codegen-cli.jar generate \
             -l typescript-axios \
             -i dist/swagger.json -o ./gen \
-            --additional-properties npmVersion=$BUILD_NUMBER,npmName=amburger-axios,npmDescription="OpenAPI client for Amburger"
+            --additional-properties npmVersion=$BUILD_NUMBER,npmName=$BUILD_REPOSITORYNAME-axios,npmDescription="OpenAPI client for $BUILD_REPOSITORYNAME"
 
       - task: PublishPipelineArtifact@1
         inputs:
