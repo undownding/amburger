@@ -18,7 +18,7 @@ jobs:
         displayName: 'Install Node.js'
 
       - script: |
-          npm install
+          npm ci
         displayName: 'Install project dependency'
 
       - script: |
@@ -55,7 +55,7 @@ jobs:
         displayName: 'Install Node.js'
 
       - script: |
-          npm install
+          npm ci
         displayName: 'Install project dependency'
 
       - script: |
