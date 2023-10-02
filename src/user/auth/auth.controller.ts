@@ -15,7 +15,7 @@ import {
 import { User } from '@/user/user.entity'
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '@/user/auth/auth.service'
-import { Response } from 'express'
+import type { Response } from 'express'
 import { ApiSummary } from '@/lib/nestjs-ext'
 import Bluebird from 'bluebird'
 import moment from 'moment'

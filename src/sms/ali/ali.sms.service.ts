@@ -1,6 +1,6 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common'
 import RPCClient from '@alicloud/pop-core'
-import { Cache } from 'cache-manager'
+import Cache from 'cache-manager'
 import { ALI_POP_CORE } from '@/sms/ali/ali.constants'
 import { SmsDto } from '@/sms/sms.dto'
 import { BaseSmsService } from '@/sms/base-sms-service'

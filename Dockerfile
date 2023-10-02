@@ -1,30 +1,38 @@
-FROM tzenderman/docker-nvm:latest AS builder
+FROM debian:latest AS builder
 
-RUN apt-get update && apt-get install python3 python3-pip git cmake -y
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN apt-get update && apt-get install python3 python3-pip git cmake curl -y
 
 RUN mkdir /app
 WORKDIR /app
 
-COPY package.json package-lock.json .nvmrc ./
-RUN /bin/bash -l -c "nvm install;" \
-    "nvm use;"
+COPY .nvmrc ./
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+RUN nvm install; nvm use
+
+COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY src ./src
 COPY nest-cli.json tsconfig.* vite.*.ts ./
 RUN npm run build:rollup
 
-FROM tzenderman/docker-nvm:latest
+FROM debian:latest
 
-#RUN apt-get update && apt-get install python3 python3-pip git cmake -y
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN apt-get update && apt-get install curl -y
 
 RUN mkdir /app
 WORKDIR /app
 
-COPY package.json package-lock.json .nvmrc ./
-RUN /bin/bash -l -c "nvm install;" \
-    "nvm use;"
-RUN npm install --production
+COPY .nvmrc ./
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+RUN nvm install; nvm use
+
+COPY package.json package-lock.json ./
+RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
 

@@ -1,3 +1,4 @@
+import type { Point } from 'typeorm'
 import {
   BeforeInsert,
   Column,
@@ -7,7 +8,6 @@ import {
   JoinTable,
   ManyToOne,
   OneToMany,
-  Point,
   PrimaryColumn,
 } from 'typeorm'
 import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
@@ -17,14 +17,14 @@ import type { IDType } from '@/lib/base-crud-service'
 import { ulid } from 'ulidx'
 import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext'
 import { User } from '@/user/user.entity'
-import heredoc from 'tsheredoc'
 import { Assigner } from '@/resource/assigner/assigner.enitity'
+import heredoc from '@/lib/tsheredoc'
 
 @Entity({ name: RESOURCE_NAME, orderBy: { id: 'ASC' } })
 export class Resource extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 26 })
   @ApiProperty({
-    example: '01FJ0V986RA01G70YQ5Z0AM0E7 ',
+    example: '01FJ0V986RA01G70YQ5Z0AM0E7',
     description: `${RESOURCE_DISPLAY_NAME} ID`,
   })
   id: IDType
@@ -47,7 +47,7 @@ export class Resource extends BaseEntity {
     example: 0,
     description: heredoc`
     如该${RESOURCE_DISPLAY_NAME}需要追踪状态，使用此字段来追踪。默认为0。
-    
+
     取值范围为 0-32767
     `,
   })
@@ -118,7 +118,7 @@ export class Resource extends BaseEntity {
   @ApiPropertyOptional({
     description: heredoc`
     该${RESOURCE_DISPLAY_NAME}是否公开，公开的${RESOURCE_DISPLAY_NAME}可以被任何人访问。
-    
+
     默认为 true
     `,
     example: true,

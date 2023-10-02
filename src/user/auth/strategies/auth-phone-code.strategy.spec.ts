@@ -13,7 +13,7 @@ import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
 import { PasswordService } from '@/user/auth/password.service'
 import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager'
-import { Cache } from 'cache-manager'
+import Cache from 'cache-manager'
 import { beforeAll, describe, expect, test } from 'vitest'
 
 describe('AuthPhoneCodeStrategy', () => {

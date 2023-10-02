@@ -23,8 +23,8 @@ import {
 import type { IToken } from '@/user/auth/auth.decorator'
 import { Me, NeedLogin, OptionalLogin } from '@/user/auth/auth.decorator'
 import { UserService } from '@/user/user.service'
-import heredoc from 'tsheredoc'
 import { Assigner } from '@/resource/assigner/assigner.enitity'
+import heredoc from '@/lib/tsheredoc'
 
 @Controller(RESOURCE_NAME)
 @ApiTags(RESOURCE_DISPLAY_NAME)
