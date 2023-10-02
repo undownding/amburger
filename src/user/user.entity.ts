@@ -10,7 +10,7 @@ import { BaseEntity } from '@/lib/base-entity'
 import { Role } from '@/user/role/role.entity'
 import { customAlphabet, nanoid } from 'nanoid'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IDType } from '@/lib/base-crud-service'
+import type { IDType } from '@/lib/base-crud-service'
 
 type IdOptions = {
   length?: number

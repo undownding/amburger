@@ -1,9 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import * as request from 'supertest'
+import supertest from 'supertest'
 import { AppModule } from '@/app.module'
 import { faker } from '@faker-js/faker'
 import { SmsProxyService } from '@/sms/sms-proxy.service'
+import { beforeAll, describe, expect, test } from 'vitest'
+
+const request = supertest
 
 describe('Auth (e2e)', () => {
   let app: INestApplication
@@ -25,7 +28,7 @@ describe('Auth (e2e)', () => {
     await app.init()
   })
 
-  it('should created a user after sign up', () =>
+  test('should created a user after sign up', () =>
     request(app.getHttpServer())
       .post('/auth/sign-up')
       .send({
@@ -41,7 +44,7 @@ describe('Auth (e2e)', () => {
         ),
       ))
 
-  it('should sign-in with username', () =>
+  test('should sign-in with username', () =>
     request(app.getHttpServer())
       .post('/auth/sign-in')
       .send({
@@ -55,7 +58,7 @@ describe('Auth (e2e)', () => {
         ),
       ))
 
-  it('should sign-in with email', () =>
+  test('should sign-in with email', () =>
     request(app.getHttpServer())
       .post('/auth/sign-in')
       .send({
@@ -69,7 +72,7 @@ describe('Auth (e2e)', () => {
         ),
       ))
 
-  it('should sign-in with phone & code', async () => {
+  test('should sign-in with phone & code', async () => {
     const code = faker.random.numeric(6, { allowLeadingZeros: false })
     await smsService.sendCode({ regionCode: '+86', phone }, code)
     await request(app.getHttpServer())
@@ -86,7 +89,7 @@ describe('Auth (e2e)', () => {
       )
   })
 
-  it('should created a new user when use an unregister phone', async () => {
+  test('should created a new user when use an unregister phone', async () => {
     const code = faker.random.numeric(6, { allowLeadingZeros: false })
     const phone = faker.random
       .numeric(11, { allowLeadingZeros: false })
@@ -105,7 +108,7 @@ describe('Auth (e2e)', () => {
       })
   })
 
-  it('should refresh token', async () => {
+  test('should refresh token', async () => {
     const { body } = await request(app.getHttpServer())
       .post('/auth/sign-in')
       .send({
@@ -125,7 +128,7 @@ describe('Auth (e2e)', () => {
       })
   })
 
-  it('should update password', async () => {
+  test('should update password', async () => {
     const newPassword = faker.internet.password()
     const { body } = await request(app.getHttpServer())
       .post('/auth/sign-in')
@@ -155,7 +158,7 @@ describe('Auth (e2e)', () => {
       )
   })
 
-  it('should reset password', async () => {
+  test('should reset password', async () => {
     const code = faker.random.numeric(6, { allowLeadingZeros: false })
     await smsService.sendCode({ regionCode: '+86', phone }, code)
     const newPassword = faker.internet.password()

@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { typeOrmModuleOptions } from '@/lib/data-source'
 import { User } from '@/user/user.entity'
 import { Role } from '@/user/role/role.entity'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('RoleService', () => {
   let service: RoleService
@@ -20,7 +21,7 @@ describe('RoleService', () => {
     service = module.get<RoleService>(RoleService)
   })
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(service).toBeDefined()
   })
 })

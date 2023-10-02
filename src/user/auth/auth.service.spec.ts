@@ -9,6 +9,7 @@ import { UserService } from '@/user/user.service'
 import { RoleService } from '@/user/role/role.service'
 import { PasswordService } from '@/user/auth/password.service'
 import { JwtModule } from '@nestjs/jwt'
+import { beforeAll, describe, expect, test } from 'vitest'
 
 describe('AuthService', () => {
   let service: AuthService
@@ -34,7 +35,7 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService)
   })
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(service).toBeDefined()
   })
 })

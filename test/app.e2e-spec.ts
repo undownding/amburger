@@ -1,12 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import * as request from 'supertest'
 import { AppModule } from '@/app.module'
+import { beforeAll, describe, test } from 'vitest'
+import supertest from 'supertest'
+
+const request = supertest
 
 describe('AppController (e2e)', () => {
   let app: INestApplication
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile()
@@ -15,7 +18,7 @@ describe('AppController (e2e)', () => {
     await app.init()
   })
 
-  it('/version (GET)', () => {
+  test('/version (GET)', async () => {
     return request(app.getHttpServer())
       .get('/version')
       .expect(200)

@@ -10,6 +10,7 @@ import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
 import { PasswordService } from '@/user/auth/password.service'
 import { AuthUsernamePasswordStrategy } from '@/user/auth/strategies/auth-username-password.strategy'
+import { beforeAll, describe, expect, test } from 'vitest'
 
 describe('AuthUserNamePasswordStrategy', () => {
   let userService: UserService
@@ -52,18 +53,18 @@ describe('AuthUserNamePasswordStrategy', () => {
     })
   })
 
-  it('should verify by userName and password', async () => {
+  test('should verify by userName and password', async () => {
     const user = await strategy.validate('panda', 'good')
     expect(user).toBeDefined()
     expect(user.name).toBe('panda')
   })
 
-  it('should return a null when user not found', async () => {
+  test('should return a null when user not found', async () => {
     const user = await strategy.validate('panda1', 'good')
     expect(user).toBeNull()
   })
 
-  it('should return a null when password is wrong', async () => {
+  test('should return a null when password is wrong', async () => {
     const user = await strategy.validate('panda', 'bad')
     expect(user).toBeNull()
   })

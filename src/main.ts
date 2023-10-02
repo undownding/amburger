@@ -4,8 +4,8 @@ import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
 import { writeFileSync } from 'fs'
-import * as cookieParser from 'cookie-parser'
-import path = require('path')
+import cookieParser from 'cookie-parser'
+import path from 'path'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)

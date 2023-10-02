@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config'
 import { User } from '@/user/user.entity'
 import { Resource } from '@/resource/resource.entity'
 import { Role } from '@/user/role/role.entity'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('AssignerService', () => {
   let service: AssignerService
@@ -24,7 +25,7 @@ describe('AssignerService', () => {
     service = module.get<AssignerService>(AssignerService)
   })
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(service).toBeDefined()
   })
 })

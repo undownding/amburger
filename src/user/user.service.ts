@@ -7,7 +7,7 @@ import { Repository } from 'typeorm'
 import { ConfigService } from '@nestjs/config'
 import { PasswordService } from '@/user/auth/password.service'
 import { AuthSignUpDto } from '@/user/auth/auth.dto'
-import * as randomstring from 'randomstring'
+import randomstring from 'randomstring'
 import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()

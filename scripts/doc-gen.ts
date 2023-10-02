@@ -3,9 +3,8 @@ import 'tsconfig-paths/register'
 import { AppModule } from '@/app.module'
 import { INestApplication } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import * as fs from 'fs'
-import { writeFileSync } from 'fs'
-import * as path from 'path'
+import fs, { writeFileSync } from 'fs'
+import path from 'path'
 
 async function bootstarp() {
   const app = await NestFactory.create(AppModule)

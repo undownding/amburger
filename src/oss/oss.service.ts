@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import * as OSS from 'ali-oss'
+import OSS from 'ali-oss'
 import { add } from 'date-fns'
 
 @Injectable()

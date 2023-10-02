@@ -7,6 +7,7 @@ import { Assigner } from '@/resource/assigner/assigner.enitity'
 import { User } from '@/user/user.entity'
 import { Resource } from '@/resource/resource.entity'
 import { Role } from '@/user/role/role.entity'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('AssignerController', () => {
   let controller: AssignerController
@@ -24,7 +25,7 @@ describe('AssignerController', () => {
     controller = module.get<AssignerController>(AssignerController)
   })
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(controller).toBeDefined()
   })
 })

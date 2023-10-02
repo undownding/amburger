@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { AdminService } from './admin.service'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('AdminService', () => {
   let service: AdminService
@@ -12,7 +13,7 @@ describe('AdminService', () => {
     service = module.get<AdminService>(AdminService)
   })
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(service).toBeDefined()
   })
 })

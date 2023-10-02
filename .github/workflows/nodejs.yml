@@ -5,38 +5,130 @@ name: Node.js CI
 
 on:
   push:
+    branches:
+      - master
+    paths:
+      - src/*
   pull_request:
+    branches: [ master ]
+
+env:
+  jar_version: 3.0.41
 
 jobs:
   build:
+    name: Try to build code
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [19.x]
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup node.js with .nvmrc
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Build project
+        run: npm run build
 
   test:
+    name: Run Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [19.x]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup node.js with .nvmrc
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: cp .env.defaults .env
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run test
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Run Test with coverage
+        run: npm run test:cov
+        continue-on-error: true
+
+      - uses: dorny/test-reporter@v1
+        name: Test Report
+        with:
+          name: Test Report                 # Name of the check run which will be created
+          path: 'junit.xml'                 # Path to test results (inside artifact .zip)
+          reporter: jest-junit              # Format of test results
+
+      - name: Coverage Report
+        uses: 5monkeys/cobertura-action@master
+        with:
+          path: coverage/cobertura-coverage.xml
+          minimum_coverage: 50
+          show_line: true
+          show_branch: true
+          show_missing: true
+
+  publish_package:
+    name: Build package and publish
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup node.js with .nvmrc
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate swagger.json
+        run: npx vite-node scripts/doc-gen.ts
+      - run: |
+          sed -i 's/\"其他\"/\"Other\"/g' dist/swagger.json
+          sed -i 's/\"用户\"/\"User\"/g' dist/swagger.json
+          sed -i 's/\"登录相关接口\"/\"Auth\"/g' dist/swagger.json
+          sed -i 's/\"管理员\"/\"Admin\"/g' dist/swagger.json
+          sed -i 's/\"OSS 接口\"/\"OSS\"/g' dist/swagger.json
+          sed -i 's/\"短信\"/\"SMS\"/g' dist/swagger.json
+          sed -i 's/\"资源\"/\"Resource\"/g' dist/swagger.json
+        name: Replace tags in swagger.json
+
+      - run: |
+          java -version
+          wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/$jar_version/swagger-codegen-cli-$jar_version.jar -O swagger-codegen-cli.jar
+          BUILD_NUMBER="0.0.${{github.run_number}}"
+          java -jar swagger-codegen-cli.jar generate \
+            -l typescript-axios \
+            -i dist/swagger.json -o ./gen \
+            --additional-properties npmRepository=https://npm.pkg.github.com/,npmVersion=$BUILD_NUMBER,npmName=@${{github.repository}}-client,npmDescription="OpenAPI client for ${{github.repository}}"
+        name: Build typescript-axios package
+
+      - name: Add .npmrc
+        run: |
+          cat > gen/.npmrc << EOF
+          //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
+          @${{github.repository_owner}}:registry=https://npm.pkg.github.com
+          always-auth=true
+          EOF
+
+      - name: Publish package
+        run: cd gen && npm publish
+
+

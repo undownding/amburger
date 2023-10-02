@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
-import { IToken, Me, NeedLogin, TryAuth } from '@/user/auth/auth.decorator'
+import type { IToken } from '@/user/auth/auth.decorator'
+import { Me, NeedLogin, TryAuth } from '@/user/auth/auth.decorator'
 import { User } from '@/user/user.entity'
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger'
 import { ApiSummary } from '@/lib/nestjs-ext'
@@ -11,7 +12,7 @@ import {
   UserUpdateDto,
   UserUpdatePasswordDto,
 } from '@/user/user.dto'
-import { IDType } from '@/lib/base-crud-service'
+import type { IDType } from '@/lib/base-crud-service'
 import { Like } from 'typeorm'
 
 @Controller('user')

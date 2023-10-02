@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { OssService } from './oss.service'
-import * as moment from 'moment'
+import moment from 'moment'
 import { ApiSummary } from '@/lib/nestjs-ext'
 
 @Controller('oss')

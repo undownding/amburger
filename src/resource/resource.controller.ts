@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { Resource } from './resource.entity'
-import { IDType } from '@/lib/base-crud-service'
+import type { IDType } from '@/lib/base-crud-service'
 import { ResourceService } from './resource.service'
 import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
 import { ApiSummary } from '@/lib/nestjs-ext'
@@ -20,12 +20,8 @@ import {
   ResourceSearchResDto,
   ResourceUpdateDto,
 } from './resource.dto'
-import {
-  IToken,
-  Me,
-  NeedLogin,
-  OptionalLogin,
-} from '@/user/auth/auth.decorator'
+import type { IToken } from '@/user/auth/auth.decorator'
+import { Me, NeedLogin, OptionalLogin } from '@/user/auth/auth.decorator'
 import { UserService } from '@/user/user.service'
 import heredoc from 'tsheredoc'
 import { Assigner } from '@/resource/assigner/assigner.enitity'

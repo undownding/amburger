@@ -3,17 +3,13 @@ import { UserService } from '@/user/user.service'
 import { Strategy } from 'passport-custom'
 import { Request } from 'express'
 import { User } from '@/user/user.entity'
-import {
-  CACHE_MANAGER,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Cache } from 'cache-manager'
 import { AuthPhoneCodeDto } from '@/user/auth/auth.dto'
-import * as randomstring from 'randomstring'
+import randomstring from 'randomstring'
 import { SmsDto } from '@/sms/sms.dto'
 import { randomBytes } from 'crypto'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
 
 @Injectable()
 export class AuthPhoneCodeStrategy extends PassportStrategy(

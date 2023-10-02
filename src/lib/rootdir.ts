@@ -1,9 +1,12 @@
-import * as path from 'path'
-import { dirname } from 'path'
+import path from 'path'
+import getRoot from 'root-dirs'
 
 export const AmburgerApi = {
   root: {
-    dir: path.join(dirname(__filename), '..', '..'),
+    dir: getRoot.getPackageJsonRoot(process.cwd(), {
+      baseType: 'package.json',
+      logger: console.log,
+    }),
     join(...paths: string[]): string {
       return path.join(this.dir, ...paths)
     },

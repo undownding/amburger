@@ -10,7 +10,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { PasswordService } from '@/user/auth/password.service'
 import { JwtModule } from '@nestjs/jwt'
 import { SmsModule } from '@/sms/sms.module'
-import { CacheModule } from '@nestjs/common'
+import { beforeAll, describe, expect, test } from 'vitest'
+import { CacheModule } from '@nestjs/cache-manager'
 
 describe('UserService', () => {
   let service: UserService
@@ -43,17 +44,17 @@ describe('UserService', () => {
     await service.onModuleInit()
   })
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(service).toBeDefined()
   })
 
-  it('should have one user', async () => {
+  test('should have one user', async () => {
     const users = await service.findAll()
     expect(users).toHaveLength(1)
     expect(users[0].roles).toHaveLength(3)
   })
 
-  it('should sign up a user', async () => {
+  test('should sign up a user', async () => {
     const user = await service.signUp({
       username: 'user_for_create_test',
       password: 'old_password',
@@ -62,7 +63,7 @@ describe('UserService', () => {
     expect(user.name).toBe('user_for_create_test')
   })
 
-  it('should update password', async () => {
+  test('should update password', async () => {
     const user = await service.signUp({
       username: 'user_for_update_password_test',
       password: 'old_password',

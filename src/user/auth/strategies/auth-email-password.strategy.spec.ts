@@ -10,6 +10,7 @@ import { RoleService } from '@/user/role/role.service'
 import { PasswordService } from '@/user/auth/password.service'
 import { ConfigModule } from '@nestjs/config'
 import { Role } from '@/user/role/role.entity'
+import { beforeAll, describe, expect, test } from 'vitest'
 
 describe('AuthEmailPasswordStrategy', () => {
   let service: UserService
@@ -42,23 +43,23 @@ describe('AuthEmailPasswordStrategy', () => {
     })
   })
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(strategy).toBeDefined()
   })
 
-  it('should verify by userName and password', async () => {
+  test('should verify by userName and password', async () => {
     const user = await strategy.validate('admin@local', 'rabbit')
     expect(user).toBeDefined()
     expect(user).not.toBeNull()
     expect(user.name).toBe('tiger')
   })
 
-  it('should return a null when user not found', async () => {
+  test('should return a null when user not found', async () => {
     const user = await strategy.validate('panda@local', 'panda')
     expect(user).toBeNull()
   })
 
-  it('should return a null when password is wrong', async () => {
+  test('should return a null when password is wrong', async () => {
     const user = await strategy.validate('admin@local', 'panda')
     expect(user).toBeNull()
   })

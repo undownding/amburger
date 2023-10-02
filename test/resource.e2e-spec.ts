@@ -1,12 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import { AppModule } from '@/app.module'
-import * as request from 'supertest'
+import supertest from 'supertest'
 import { faker } from '@faker-js/faker'
 import { Resource } from '@/resource/resource.entity'
 import { ResourceService } from '@/resource/resource.service'
 import { TransactionalTestContext } from 'typeorm-transactional-tests'
 import { getDataSourceToken } from '@nestjs/typeorm'
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+} from 'vitest'
+
+const request = supertest
 
 describe('Resource (e2e)', () => {
   let app: INestApplication
@@ -57,7 +67,7 @@ describe('Resource (e2e)', () => {
 
   afterEach(() => transactionalContext.finish())
 
-  it('should create resource', async () => {
+  test('should create resource', async () => {
     const title = faker.lorem.sentence()
     const content = faker.lorem.paragraph()
     const data = { title, content }
@@ -84,7 +94,7 @@ describe('Resource (e2e)', () => {
       })
   })
 
-  it("should get user's resource", async () => {
+  test("should get user's resource", async () => {
     return request(app.getHttpServer())
       .get('/resource')
       .set('Authorization', `Bearer ${accessToken}`)
@@ -101,7 +111,7 @@ describe('Resource (e2e)', () => {
       })
   })
 
-  it('should get a resource', async () => {
+  test('should get a resource', async () => {
     return request(app.getHttpServer())
       .get(`/resource/${resource.id}`)
       .set('Authorization', `Bearer ${accessToken}`)
@@ -120,7 +130,7 @@ describe('Resource (e2e)', () => {
       })
   })
 
-  it('should update a resource', async () => {
+  test('should update a resource', async () => {
     const title = faker.lorem.sentence()
     const content = faker.lorem.paragraph()
     const data = { title, content }
@@ -147,7 +157,7 @@ describe('Resource (e2e)', () => {
       })
   })
 
-  it('should delete a resource', async () => {
+  test('should delete a resource', async () => {
     await request(app.getHttpServer())
       .delete(`/resource/${resource.id}`)
       .set('Authorization', `Bearer ${accessToken}`)

@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
-import * as dotenv from 'dotenv'
-import * as process from 'process'
+import dotenv from 'dotenv'
+import process from 'process'
 
 import { AmburgerApi } from './rootdir'
 import { DataSourceOptions } from 'typeorm'

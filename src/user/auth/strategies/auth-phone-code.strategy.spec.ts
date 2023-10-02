@@ -12,8 +12,9 @@ import { UserService } from '@/user/user.service'
 import { RoleService } from '@/user/role/role.service'
 import { AuthService } from '@/user/auth/auth.service'
 import { PasswordService } from '@/user/auth/password.service'
-import { CACHE_MANAGER, CacheModule } from '@nestjs/common'
+import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager'
 import { Cache } from 'cache-manager'
+import { beforeAll, describe, expect, test } from 'vitest'
 
 describe('AuthPhoneCodeStrategy', () => {
   let userService: UserService
@@ -60,7 +61,7 @@ describe('AuthPhoneCodeStrategy', () => {
     strategy = new AuthPhoneCodeStrategy(userService, cacheManager)
   })
 
-  it('should verify a exist user', async () => {
+  test('should verify a exist user', async () => {
     await userService.create({
       regionCode: '+86',
       phone: '12345678901',
@@ -87,7 +88,7 @@ describe('AuthPhoneCodeStrategy', () => {
     expect(user.name).toBe('PhoneUser')
   })
 
-  it('should verify a new user', async () => {
+  test('should verify a new user', async () => {
     await smsService.sendCode(
       {
         regionCode: '+86',
@@ -107,7 +108,7 @@ describe('AuthPhoneCodeStrategy', () => {
     expect(user.name.startsWith('手机用户')).toBe(true)
   })
 
-  it('should return null when code incorrect', async () => {
+  test('should return null when code incorrect', async () => {
     await smsService.sendCode(
       {
         regionCode: '+86',

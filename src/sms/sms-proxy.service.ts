@@ -1,14 +1,10 @@
-import {
-  CACHE_MANAGER,
-  ConflictException,
-  Inject,
-  Injectable,
-} from '@nestjs/common'
+import { ConflictException, Inject, Injectable } from '@nestjs/common'
 import { Cache } from 'cache-manager'
 import { SmsDto } from '@/sms/sms.dto'
 import { BaseSmsService } from '@/sms/base-sms-service'
 import { SMS_SERVICE } from '@/sms/sms.constants'
 import * as process from 'process'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
 
 @Injectable()
 export class SmsProxyService extends BaseSmsService {

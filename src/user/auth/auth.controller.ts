@@ -5,8 +5,8 @@ import {
   AuthSignUpDto,
   TokenRespDto,
 } from '@/user/auth/auth.dto'
+import type { IToken } from '@/user/auth/auth.decorator'
 import {
-  IToken,
   Me,
   NeedRefreshToken,
   Token,
@@ -17,8 +17,8 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AuthService } from '@/user/auth/auth.service'
 import { Response } from 'express'
 import { ApiSummary } from '@/lib/nestjs-ext'
-import * as Bluebird from 'bluebird'
-import * as moment from 'moment'
+import Bluebird from 'bluebird'
+import moment from 'moment'
 import { UserService } from '@/user/user.service'
 
 @Controller('auth')
@@ -81,12 +81,12 @@ export class AuthController {
     description: '刷新令牌成功',
   })
   async refreshToken(
-    @Me() me: IToken,
-    @Token() rawToken,
+    @Me() me: IToken, // 此处的 me 为 refreshToken 携带的内容
+    @Token() rawToken: string,
     @Res() res: Response,
   ): Promise<void> {
-    const exp = moment(rawToken.exp * 1000)
-    const refreshToken =
+    const exp = moment(me.exp * 1000)
+    const refreshToken: string =
       exp.diff(moment(), 'days') < 3
         ? await this.authService.sign(me, 'refresh_token')
         : rawToken

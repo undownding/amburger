@@ -1,15 +1,11 @@
-import {
-  CACHE_MANAGER,
-  ConflictException,
-  Inject,
-  Injectable,
-} from '@nestjs/common'
-import * as RPCClient from '@alicloud/pop-core'
+import { ConflictException, Inject, Injectable } from '@nestjs/common'
+import RPCClient from '@alicloud/pop-core'
 import { Cache } from 'cache-manager'
 import { ALI_POP_CORE } from '@/sms/ali/ali.constants'
 import { SmsDto } from '@/sms/sms.dto'
 import { BaseSmsService } from '@/sms/base-sms-service'
 import { ConfigService } from '@nestjs/config'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
 
 @Injectable()
 export class AliSmsService extends BaseSmsService {

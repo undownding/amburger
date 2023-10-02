@@ -13,7 +13,7 @@ import {
 import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
 import { BaseEntity } from '@/lib/base-entity'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IDType } from '@/lib/base-crud-service'
+import type { IDType } from '@/lib/base-crud-service'
 import { ulid } from 'ulidx'
 import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext'
 import { User } from '@/user/user.entity'
