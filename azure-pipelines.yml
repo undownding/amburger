@@ -59,7 +59,7 @@ jobs:
         displayName: 'Install project dependency'
 
       - script: |
-          npx ts-node scripts/doc-gen.ts
+          vite-node scripts/doc-gen.ts
         displayName: 'Generate swagger.json'
 
       - script: |
