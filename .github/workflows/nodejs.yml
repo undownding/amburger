@@ -83,6 +83,7 @@ jobs:
   publish_package:
     name: Build package and publish
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
     needs:
       - build
       - test
