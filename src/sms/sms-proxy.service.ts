@@ -1,8 +1,8 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common'
 import Cache from 'cache-manager'
-import { SmsDto } from '@/sms/sms.dto'
-import { BaseSmsService } from '@/sms/base-sms-service'
-import { SMS_SERVICE } from '@/sms/sms.constants'
+import { SmsDto } from '@/sms/sms.dto.js'
+import { BaseSmsService } from '@/sms/base-sms-service.js'
+import { SMS_SERVICE } from '@/sms/sms.constants.js'
 import * as process from 'process'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 

@@ -6,10 +6,11 @@ import {
 } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { ApiCookieAuth, ApiResponse } from '@nestjs/swagger'
-import { JwtGuard } from '@/user/auth/guards/auth-jwt.guard'
-import { LocalAuthGuard } from '@/user/auth/guards/local-auth.guard'
+import { JwtGuard } from '@/user/auth/guards/auth-jwt.guard.js'
+import { LocalAuthGuard } from '@/user/auth/guards/local-auth.guard.js'
 import { AuthGuard } from '@nestjs/passport'
-import { OptionalAuthGuard } from '@/user/auth/guards/optional-auth.guard'
+import { OptionalAuthGuard } from '@/user/auth/guards/optional-auth.guard.js'
+import type { Request } from 'express'
 
 export type TokenType = 'access_token' | 'refresh_token'
 

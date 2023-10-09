@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import 'tsconfig-paths/register'
-import { AppModule } from '@/app.module'
+import { AppModule } from '@/app.module.js'
 import { INestApplication } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import fs, { writeFileSync } from 'fs'

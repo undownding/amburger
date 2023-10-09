@@ -1,5 +1,5 @@
 import { Column, ColumnOptions } from 'typeorm'
-import { typeOrmModuleOptions } from '@/lib/data-source'
+import { typeOrmModuleOptions } from '@/lib/data-source.js'
 import { customAlphabet, nanoid } from 'nanoid'
 
 export function JsonColumn(options?: ColumnOptions) {

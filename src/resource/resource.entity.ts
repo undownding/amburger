@@ -10,15 +10,15 @@ import {
   OneToMany,
   PrimaryColumn,
 } from 'typeorm'
-import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
-import { BaseEntity } from '@/lib/base-entity'
+import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant.js'
+import { BaseEntity } from '@/lib/base-entity.js'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import type { IDType } from '@/lib/base-crud-service'
+import type { IDType } from '@/lib/base-crud-service.js'
 import { ulid } from 'ulidx'
-import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext'
-import { User } from '@/user/user.entity'
-import { Assigner } from '@/resource/assigner/assigner.enitity'
-import heredoc from '@/lib/tsheredoc'
+import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext.js'
+import { User } from '@/user/user.entity.js'
+import { Assigner } from '@/resource/assigner/assigner.enitity.js'
+import heredoc from '@/lib/tsheredoc.js'
 
 @Entity({ name: RESOURCE_NAME, orderBy: { id: 'ASC' } })
 export class Resource extends BaseEntity {

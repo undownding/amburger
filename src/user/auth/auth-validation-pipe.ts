@@ -11,7 +11,7 @@ import {
   AuthPhoneDto,
   AuthUserNameDto,
   AuthWeChatDto,
-} from '@/user/auth/auth.dto'
+} from '@/user/auth/auth.dto.js'
 import { validateOrReject } from 'class-validator'
 import { plainToClassFromExist } from 'class-transformer'
 

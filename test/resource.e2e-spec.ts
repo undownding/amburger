@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import { AppModule } from '@/app.module'
+import { AppModule } from '@/app.module.js'
 import supertest from 'supertest'
 import { faker } from '@faker-js/faker'
-import { Resource } from '@/resource/resource.entity'
-import { ResourceService } from '@/resource/resource.service'
+import { Resource } from '@/resource/resource.entity.js'
+import { ResourceService } from '@/resource/resource.service.js'
 import { TransactionalTestContext } from 'typeorm-transactional-tests'
 import { getDataSourceToken } from '@nestjs/typeorm'
 import {

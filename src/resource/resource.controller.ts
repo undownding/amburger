@@ -9,22 +9,22 @@ import {
   Query,
 } from '@nestjs/common'
 import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
-import { Resource } from './resource.entity'
-import type { IDType } from '@/lib/base-crud-service'
-import { ResourceService } from './resource.service'
-import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
-import { ApiSummary } from '@/lib/nestjs-ext'
+import { Resource } from './resource.entity.js'
+import type { IDType } from '@/lib/base-crud-service.js'
+import { ResourceService } from './resource.service.js'
+import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant.js'
+import { ApiSummary } from '@/lib/nestjs-ext.js'
 import {
   AssignerUpdateDto,
   ResourceSearchQuery,
   ResourceSearchResDto,
   ResourceUpdateDto,
-} from './resource.dto'
-import type { IToken } from '@/user/auth/auth.decorator'
-import { Me, NeedLogin, OptionalLogin } from '@/user/auth/auth.decorator'
-import { UserService } from '@/user/user.service'
-import { Assigner } from '@/resource/assigner/assigner.enitity'
-import heredoc from '@/lib/tsheredoc'
+} from './resource.dto.js'
+import type { IToken } from '@/user/auth/auth.decorator.js'
+import { Me, NeedLogin, OptionalLogin } from '@/user/auth/auth.decorator.js'
+import { UserService } from '@/user/user.service.js'
+import { Assigner } from '@/resource/assigner/assigner.enitity.js'
+import heredoc from '@/lib/tsheredoc.js'
 
 @Controller(RESOURCE_NAME)
 @ApiTags(RESOURCE_DISPLAY_NAME)

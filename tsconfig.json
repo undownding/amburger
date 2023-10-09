@@ -1,20 +1,24 @@
 {
+  "ts-node": {
+    "swc": true,
+    "transpileOnly": true
+  },
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
+    "moduleResolution": "nodenext",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "target": "es2020",
+    "target": "esnext",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "rootDir": "src",
     "tsBuildInfoFile": "./dist/tsconfig.build.tsbuildinfo",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
@@ -22,12 +26,14 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "lib": ["esnext"],
+    "types": ["node", "vite/client"]
   },
   "include": [
     "src/",
     "test/",
     "scripts/",
     "vite.config.ts"
-  ],
+  ]
 }

@@ -6,11 +6,11 @@ import {
   ManyToMany,
   PrimaryColumn,
 } from 'typeorm'
-import { BaseEntity } from '@/lib/base-entity'
-import { Role } from '@/user/role/role.entity'
+import { BaseEntity } from '@/lib/base-entity.js'
+import { Role } from '@/user/role/role.entity.js'
 import { customAlphabet, nanoid } from 'nanoid'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import type { IDType } from '@/lib/base-crud-service'
+import type { IDType } from '@/lib/base-crud-service.js'
 
 type IdOptions = {
   length?: number

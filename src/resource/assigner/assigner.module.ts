@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
-import { AssignerService } from './assigner.service'
-import { AssignerController } from './assigner.controller'
+import { AssignerService } from './assigner.service.js'
+import { AssignerController } from './assigner.controller.js'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Assigner } from '@/resource/assigner/assigner.enitity'
+import { Assigner } from '@/resource/assigner/assigner.enitity.js'
 
 @Module({
   imports: [TypeOrmModule.forFeature([Assigner])],

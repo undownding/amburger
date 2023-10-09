@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { BaseSmsService } from '@/sms/base-sms-service'
-import { SmsDto } from '@/sms/sms.dto'
+import { BaseSmsService } from '@/sms/base-sms-service.js'
+import { SmsDto } from '@/sms/sms.dto.js'
 
 @Injectable()
 export class MockService extends BaseSmsService {

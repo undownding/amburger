@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { SmsProxyService } from '@/sms/sms-proxy.service'
-import { MockModule } from '@/sms/mock/mock.module'
+import { SmsProxyService } from '@/sms/sms-proxy.service.js'
+import { MockModule } from '@/sms/mock/mock.module.js'
 import { beforeEach, describe, expect, test } from 'vitest'
 import { CacheModule } from '@nestjs/cache-manager'
 

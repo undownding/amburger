@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import { AppModule } from '@/app.module'
+import { AppModule } from '@/app.module.js'
 import { beforeAll, describe, test } from 'vitest'
 import supertest from 'supertest'
 

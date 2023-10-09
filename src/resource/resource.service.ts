@@ -4,20 +4,20 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import { BaseCrudService, IDType } from '@/lib/base-crud-service'
-import { Resource } from './resource.entity'
+import { BaseCrudService, IDType } from '@/lib/base-crud-service.js'
+import { Resource } from './resource.entity.js'
 import { Brackets, In, Repository } from 'typeorm'
-import { UserService } from '@/user/user.service'
+import { UserService } from '@/user/user.service.js'
 import {
   ResourceSearchQuery,
   ResourceSearchResDto,
   ResourceUpdateDto,
-} from '@/resource/resource.dto'
-import { Permissions } from './assigner/permission.enum'
+} from '@/resource/resource.dto.js'
+import { Permissions } from './assigner/permission.enum.js'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DeepPartial } from 'typeorm/common/DeepPartial'
-import { AssignerService } from '@/resource/assigner/assigner.service'
-import { Assigner } from '@/resource/assigner/assigner.enitity'
+import { AssignerService } from '@/resource/assigner/assigner.service.js'
+import { Assigner } from '@/resource/assigner/assigner.enitity.js'
 
 @Injectable()
 export class ResourceService extends BaseCrudService<Resource> {
@@ -51,50 +51,6 @@ export class ResourceService extends BaseCrudService<Resource> {
     private readonly userService: UserService,
   ) {
     super(repository)
-  }
-
-  private async canModify(id: IDType, userId: IDType): Promise<boolean> {
-    return this.repository
-      .count({
-        where: [
-          {
-            id,
-            owner: { id: userId },
-          },
-          {
-            id,
-            assigners: {
-              user: { id: userId },
-              permission: In([Permissions.MANAGE, Permissions.WRITEABLE]),
-            },
-          },
-        ],
-      })
-      .then((count) => count > 0)
-  }
-
-  private async isOwner(id: IDType, userId: IDType): Promise<boolean> {
-    return this.repository
-      .createQueryBuilder('resource')
-      .leftJoinAndSelect('resource.owner', 'owner')
-      .leftJoinAndSelect('resource.assigners', 'assigners')
-      .leftJoinAndSelect('assigners.user', 'user')
-      .where('resource.id = :id', { id, userId })
-      .andWhere(this.isOwnerBracket)
-      .getCount()
-      .then((count) => count > 0)
-  }
-
-  private async isOwnerOrManager(id: IDType, userId: IDType): Promise<boolean> {
-    return this.repository
-      .createQueryBuilder('resource')
-      .leftJoinAndSelect('resource.owner', 'owner')
-      .leftJoinAndSelect('resource.assigners', 'assigners')
-      .leftJoinAndSelect('assigners.user', 'user')
-      .where('resource.id = :id', { id, userId })
-      .andWhere((qb) => qb.where(this.isOwnerBracket).orWhere(this.isManager))
-      .getCount()
-      .then((count) => count > 0)
   }
 
   async create(
@@ -292,5 +248,49 @@ export class ResourceService extends BaseCrudService<Resource> {
         count,
         data,
       }))
+  }
+
+  private async canModify(id: IDType, userId: IDType): Promise<boolean> {
+    return this.repository
+      .count({
+        where: [
+          {
+            id,
+            owner: { id: userId },
+          },
+          {
+            id,
+            assigners: {
+              user: { id: userId },
+              permission: In([Permissions.MANAGE, Permissions.WRITEABLE]),
+            },
+          },
+        ],
+      })
+      .then((count) => count > 0)
+  }
+
+  private async isOwner(id: IDType, userId: IDType): Promise<boolean> {
+    return this.repository
+      .createQueryBuilder('resource')
+      .leftJoinAndSelect('resource.owner', 'owner')
+      .leftJoinAndSelect('resource.assigners', 'assigners')
+      .leftJoinAndSelect('assigners.user', 'user')
+      .where('resource.id = :id', { id, userId })
+      .andWhere(this.isOwnerBracket)
+      .getCount()
+      .then((count) => count > 0)
+  }
+
+  private async isOwnerOrManager(id: IDType, userId: IDType): Promise<boolean> {
+    return this.repository
+      .createQueryBuilder('resource')
+      .leftJoinAndSelect('resource.owner', 'owner')
+      .leftJoinAndSelect('resource.assigners', 'assigners')
+      .leftJoinAndSelect('assigners.user', 'user')
+      .where('resource.id = :id', { id, userId })
+      .andWhere((qb) => qb.where(this.isOwnerBracket).orWhere(this.isManager))
+      .getCount()
+      .then((count) => count > 0)
   }
 }

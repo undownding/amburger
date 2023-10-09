@@ -4,10 +4,10 @@ import {
   OmitType,
   PickType,
 } from '@nestjs/swagger'
-import { Resource } from './resource.entity'
+import { Resource } from './resource.entity.js'
 import { IsBoolean, IsOptional } from 'class-validator'
-import { Paged, PagedDto } from '@/lib/base-crud-service'
-import { Assigner } from '@/resource/assigner/assigner.enitity'
+import { Paged, PagedDto } from '@/lib/base-crud-service.js'
+import { Assigner } from '@/resource/assigner/assigner.enitity.js'
 
 export class ResourceUpdateDto extends OmitType(Resource, [
   'id',

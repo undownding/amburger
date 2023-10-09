@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AdminService } from './admin.service'
+import { AdminService } from './admin.service.js'
 import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('AdminService', () => {

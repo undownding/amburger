@@ -5,7 +5,7 @@ import {
   SetMetadata,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { UserService } from '@/user/user.service'
+import { UserService } from '@/user/user.service.js'
 import { In } from 'typeorm'
 
 export const Roles = (...roles: string[]) => SetMetadata('roles', roles)

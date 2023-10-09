@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger'
 import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator'
-import { User } from '@/user/user.entity'
+import { User } from '@/user/user.entity.js'
 
 export class AuthUserNameDto {
   @ApiProperty() @IsString() username: string

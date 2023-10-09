@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-custom'
-import { User } from '@/user/user.entity'
-import { AuthWeChatDto } from '@/user/auth/auth.dto'
+import { User } from '@/user/user.entity.js'
+import { AuthWeChatDto } from '@/user/auth/auth.dto.js'
 import { HttpService } from '@nestjs/axios'
 import { ConfigService } from '@nestjs/config'
 import { Expose } from 'class-transformer'
 import { firstValueFrom } from 'rxjs'
 import buildUrl from 'build-url-ts'
-import { UserService } from '@/user/user.service'
+import { UserService } from '@/user/user.service.js'
 
 export type GrantType = 'client_credential' | 'authorization_code'
 

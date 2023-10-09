@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core'
-import { AppModule } from './app.module'
+import { AppModule } from './app.module.js'
 import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
@@ -7,7 +7,7 @@ import { writeFileSync } from 'fs'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 
-async function bootstrap() {
+async function createApp(): Promise<INestApplication<any>> {
   const app = await NestFactory.create(AppModule)
   const configService = app.get(ConfigService)
 
@@ -37,7 +37,7 @@ async function bootstrap() {
 
   app.use(cookieParser())
 
-  await app.listen(3000)
+  return app
 }
 
 export function setupSwagger(app: INestApplication): void {
@@ -53,4 +53,15 @@ export function setupSwagger(app: INestApplication): void {
 
   SwaggerModule.setup('/apidoc', app, document)
 }
-bootstrap()
+async function main() {
+  const app = await createApp()
+  await app.listen(3000)
+}
+
+export let viteNodeApp: Promise<INestApplication>
+
+if (!import.meta.env?.DEV) {
+  void main()
+} else {
+  viteNodeApp = createApp()
+}

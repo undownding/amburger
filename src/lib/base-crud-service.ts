@@ -5,7 +5,7 @@ import {
   Repository,
 } from 'typeorm'
 import { DeepPartial } from 'typeorm/common/DeepPartial'
-import { BaseEntity } from '@/lib/base-entity'
+import { BaseEntity } from '@/lib/base-entity.js'
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { IsInt, IsOptional, Min } from 'class-validator'
 import { BadRequestException } from '@nestjs/common'

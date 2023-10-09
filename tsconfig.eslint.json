@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2019",
+    "module": "esnext",
+    "moduleResolution": "nodenext",
+    "target": "esnext",
     "sourceMap": true,
     "declaration": true,
     "emitDecoratorMetadata": true,

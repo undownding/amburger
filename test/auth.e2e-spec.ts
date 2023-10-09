@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import supertest from 'supertest'
-import { AppModule } from '@/app.module'
+import { AppModule } from '@/app.module.js'
 import { faker } from '@faker-js/faker'
-import { SmsProxyService } from '@/sms/sms-proxy.service'
+import { SmsProxyService } from '@/sms/sms-proxy.service.js'
 import { beforeAll, describe, expect, test } from 'vitest'
 
 const request = supertest

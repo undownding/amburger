@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { ApiSummary } from '@/lib/nestjs-ext'
-import { SmsProxyService } from '@/sms/sms-proxy.service'
-import { SmsDto } from '@/sms/sms.dto'
+import { ApiSummary } from '@/lib/nestjs-ext.js'
+import { SmsProxyService } from '@/sms/sms-proxy.service.js'
+import { SmsDto } from '@/sms/sms.dto.js'
 
 @Controller('sms')
 @ApiTags('短信')

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { MockService } from './mock.service'
-import { SMS_SERVICE } from '@/sms/sms.constants'
+import { MockService } from './mock.service.js'
+import { SMS_SERVICE } from '@/sms/sms.constants.js'
 
 @Module({
   providers: [
