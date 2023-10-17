@@ -27,7 +27,7 @@ export class Resource extends BaseEntity {
     example: '01FJ0V986RA01G70YQ5Z0AM0E7',
     description: `${RESOURCE_DISPLAY_NAME} ID`,
   })
-  id: IDType
+  id: IDType = ''
 
   @Column({ type: 'tinyint', default: 0 })
   @Index()

@@ -7,7 +7,7 @@ import { HttpService } from '@nestjs/axios'
 import { ConfigService } from '@nestjs/config'
 import { Expose } from 'class-transformer'
 import { firstValueFrom } from 'rxjs'
-import buildUrl from 'build-url-ts'
+import { buildUrl } from 'build-url-ts'
 import { UserService } from '@/user/user.service.js'
 
 export type GrantType = 'client_credential' | 'authorization_code'

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AuthService } from './auth.service'
+import { AuthService } from './auth.service.js'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { typeOrmModuleOptions } from '@/lib/data-source.js'
 import { User } from '@/user/user.entity.js'

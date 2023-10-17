@@ -15,7 +15,6 @@ import {
 } from '@/resource/resource.dto.js'
 import { Permissions } from './assigner/permission.enum.js'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DeepPartial } from 'typeorm/common/DeepPartial'
 import { AssignerService } from '@/resource/assigner/assigner.service.js'
 import { Assigner } from '@/resource/assigner/assigner.enitity.js'
 
@@ -53,15 +52,12 @@ export class ResourceService extends BaseCrudService<Resource> {
     super(repository)
   }
 
-  async create(
-    data: DeepPartial<Resource>,
-    ownerId?: string,
-  ): Promise<Resource> {
+  async create(data: Partial<Resource>, ownerId?: string): Promise<Resource> {
     const user = await this.userService.getById(ownerId)
 
     const resource = this.repository.create(data)
     resource.owner = user
-    await this.repository.save(resource)
+    await this.repository.save(resource as Resource)
     return resource
   }
 

@@ -5,7 +5,7 @@ import { User } from '@/user/user.entity.js'
 @Entity()
 export class Role extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string
+  id: string = ''
 
   @Column({
     unique: true,

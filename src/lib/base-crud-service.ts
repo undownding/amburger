@@ -4,7 +4,6 @@ import {
   FindOptionsWhere,
   Repository,
 } from 'typeorm'
-import { DeepPartial } from 'typeorm/common/DeepPartial'
 import { BaseEntity } from '@/lib/base-entity.js'
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { IsInt, IsOptional, Min } from 'class-validator'
@@ -66,8 +65,8 @@ export class BaseCrudService<T extends BaseEntity> {
     return this.baseRepository.exist(options)
   }
 
-  public async create(data: DeepPartial<T>): Promise<T> {
-    return this.baseRepository.save(this.baseRepository.create(data))
+  public async create(data: Partial<T>): Promise<T> {
+    return this.baseRepository.save(this.baseRepository.create(data as T))
   }
 
   public async search(

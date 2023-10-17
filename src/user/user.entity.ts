@@ -25,7 +25,7 @@ const defaultIdOptions: IdOptions = {
 export class User extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: defaultIdOptions.length })
   @ApiProperty({ example: '9r8-1fn0Vk', description: '用户ID' })
-  id: IDType
+  id: IDType = ''
 
   @Column({ unique: true })
   @ApiProperty({ example: 'admin', description: '用户名' })

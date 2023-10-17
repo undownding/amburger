@@ -22,7 +22,7 @@ export class UserUpdatePasswordDto {
 export class UserResetPasswordDto extends AuthBodyDto {
   @ApiProperty({ description: '新密码', example: 'new-password' })
   @IsString()
-  password: string
+  password: string = ''
 }
 
 export class UserSearchDto extends PagedDto {

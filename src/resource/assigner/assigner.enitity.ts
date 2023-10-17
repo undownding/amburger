@@ -9,7 +9,7 @@ import { RESOURCE_NAME } from '@/resource/resource.constant.js'
 @Entity({ name: `${RESOURCE_NAME}_assigner`, orderBy: { permission: 'DESC' } })
 export class Assigner extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string
+  id: string = ''
 
   @Column({ type: 'tinyint', enum: Permissions })
   @ApiProperty({ enum: Permissions, description: '分配的权限' })

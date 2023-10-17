@@ -4,15 +4,15 @@
     "transpileOnly": true
   },
   "compilerOptions": {
-    "module": "esnext",
+    "module": "nodenext",
     "moduleResolution": "nodenext",
+    "target": "esnext",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "target": "esnext",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
