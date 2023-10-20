@@ -8,5 +8,7 @@
   "module": {
     "type": "nodenext"
   },
-  "isModule": true
+  "isModule": true,
+  "sourceMaps": true,
+  "inlineSourcesContent": true,
 }

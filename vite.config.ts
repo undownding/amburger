@@ -20,7 +20,6 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
-    sourcemap: true,
     rollupOptions: {
       output: {
         preserveModules: true,
@@ -60,6 +59,7 @@ export default defineConfig({
       appPath: './src/main.ts',
       tsCompiler: 'swc',
       swcOptions: {
+        swcrc: true,
         module: {
           type: 'es6',
         },
