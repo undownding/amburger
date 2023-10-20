@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { VitePluginNode } from 'vite-plugin-node'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 export default defineConfig({
   test: {
@@ -18,10 +19,13 @@ export default defineConfig({
     },
   },
   build: {
-    target: 'es2020',
-  },
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    target: 'esnext',
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        preserveModules: true,
+      },
+    },
   },
   optimizeDeps: {
     // Vite does not work well with optionnal dependencies, mark them as ignored for now
@@ -50,6 +54,7 @@ export default defineConfig({
       loose: true,
       root: './',
     }),
+    cjsInterop({ dependencies: ['cache-manager'] }),
     ...VitePluginNode({
       adapter: 'nest',
       appPath: './src/main.ts',

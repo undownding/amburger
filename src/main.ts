@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config'
 import { writeFileSync } from 'fs'
 import cookieParser from 'cookie-parser'
 import path from 'path'
+import { Request, Response } from 'express'
 
 async function createApp(): Promise<INestApplication<any>> {
   const app = await NestFactory.create(AppModule)
@@ -52,6 +53,9 @@ export function setupSwagger(app: INestApplication): void {
   writeFileSync(outputPath, JSON.stringify(document), { encoding: 'utf8' })
 
   SwaggerModule.setup('/apidoc', app, document)
+  app.use('/', (req: Request, res: Response) => {
+    res.redirect('/apidoc')
+  })
 }
 async function main() {
   const app = await createApp()

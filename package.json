@@ -7,12 +7,10 @@
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
-    "build": "nest build",
-    "build:rollup": "vite build",
+    "build": "vite build",
+    "build:rollup": "vite build --config vite.config.rollup.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
+    "start": "vite --mode development",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "vitest --run",
@@ -93,6 +91,7 @@
     "unplugin-swc": "^1.4.3",
     "vite": "^4.4.11",
     "vite-node": "^0.34.6",
+    "vite-plugin-cjs-interop": "^1.1.0",
     "vite-plugin-node": "^3.0.2",
     "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.34.6"
