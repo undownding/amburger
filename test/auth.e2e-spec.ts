@@ -73,7 +73,7 @@ describe('Auth (e2e)', () => {
       ))
 
   test('should sign-in with phone & code', async () => {
-    const code = faker.random.numeric(6, { allowLeadingZeros: false })
+    const code = faker.string.numeric({ length: 6, allowLeadingZeros: false })
     await smsService.sendCode({ regionCode: '+86', phone }, code)
     await request(app.getHttpServer())
       .post('/auth/sign-in')
@@ -90,9 +90,9 @@ describe('Auth (e2e)', () => {
   })
 
   test('should created a new user when use an unregister phone', async () => {
-    const code = faker.random.numeric(6, { allowLeadingZeros: false })
-    const phone = faker.random
-      .numeric(11, { allowLeadingZeros: false })
+    const code = faker.string.numeric({ length: 6, allowLeadingZeros: false })
+    const phone = faker.string
+      .numeric({ length: 6, allowLeadingZeros: false })
       .toString()
     await smsService.sendCode({ regionCode: '+86', phone }, code)
     await request(app.getHttpServer())
@@ -159,7 +159,7 @@ describe('Auth (e2e)', () => {
   })
 
   test('should reset password', async () => {
-    const code = faker.random.numeric(6, { allowLeadingZeros: false })
+    const code = faker.string.numeric({ length: 6, allowLeadingZeros: false })
     await smsService.sendCode({ regionCode: '+86', phone }, code)
     const newPassword = faker.internet.password()
     await request(app.getHttpServer())
