@@ -1,10 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import { AppModule } from '@/app.module.js'
-import supertest from 'supertest'
+import { AppModule } from '@/app.module'
 import { faker } from '@faker-js/faker'
-import { Resource } from '@/resource/resource.entity.js'
-import { ResourceService } from '@/resource/resource.service.js'
+import { Resource } from '@/resource/resource.entity'
+import { ResourceService } from '@/resource/resource.service'
 import { TransactionalTestContext } from 'typeorm-transactional-tests'
 import { getDataSourceToken } from '@nestjs/typeorm'
 import {
@@ -15,8 +14,7 @@ import {
   expect,
   test,
 } from 'vitest'
-
-const request = supertest
+import request from 'supertest'
 
 describe('Resource (e2e)', () => {
   let app: INestApplication
@@ -42,8 +40,8 @@ describe('Resource (e2e)', () => {
         username: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
-        phone: faker.random
-          .numeric(11, { allowLeadingZeros: false })
+        phone: faker.string
+          .numeric({ length: 11, allowLeadingZeros: false })
           .toString(),
       })
     accessToken = body.accessToken

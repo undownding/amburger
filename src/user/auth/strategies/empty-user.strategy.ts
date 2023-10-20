@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-custom'
-import type { IToken } from '@/user/auth/auth.decorator.js'
+import type { IToken } from '@/user/auth/auth.decorator'
 
 @Injectable()
 export class EmptyUserStrategy extends PassportStrategy(

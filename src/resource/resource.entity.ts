@@ -10,15 +10,15 @@ import {
   OneToMany,
   PrimaryColumn,
 } from 'typeorm'
-import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant.js'
-import { BaseEntity } from '@/lib/base-entity.js'
+import { RESOURCE_DISPLAY_NAME, RESOURCE_NAME } from './resource.constant'
+import { BaseEntity } from '@/lib/base-entity'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import type { IDType } from '@/lib/base-crud-service.js'
+import type { IDType } from '@/lib/base-crud-service'
 import { ulid } from 'ulidx'
-import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext.js'
-import { User } from '@/user/user.entity.js'
-import { Assigner } from '@/resource/assigner/assigner.enitity.js'
-import heredoc from '@/lib/tsheredoc.js'
+import { BooleanColumn, JsonColumn, PointColumn } from '@/lib/typeorm-ext'
+import { User } from '@/user/user.entity'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
+import heredoc from '@/lib/tsheredoc'
 
 @Entity({ name: RESOURCE_NAME, orderBy: { id: 'ASC' } })
 export class Resource extends BaseEntity {
@@ -27,7 +27,7 @@ export class Resource extends BaseEntity {
     example: '01FJ0V986RA01G70YQ5Z0AM0E7',
     description: `${RESOURCE_DISPLAY_NAME} ID`,
   })
-  id: IDType = ''
+  declare id: IDType
 
   @Column({ type: 'tinyint', default: 0 })
   @Index()

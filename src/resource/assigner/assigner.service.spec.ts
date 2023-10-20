@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AssignerService } from './assigner.service.js'
+import { AssignerService } from './assigner.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { typeOrmModuleOptions } from '@/lib/data-source.js'
-import { Assigner } from '@/resource/assigner/assigner.enitity.js'
+import { typeOrmModuleOptions } from '@/lib/data-source'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
 import { ConfigModule } from '@nestjs/config'
-import { User } from '@/user/user.entity.js'
-import { Resource } from '@/resource/resource.entity.js'
-import { Role } from '@/user/role/role.entity.js'
+import { User } from '@/user/user.entity'
+import { Resource } from '@/resource/resource.entity'
+import { Role } from '@/user/role/role.entity'
 import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('AssignerService', () => {

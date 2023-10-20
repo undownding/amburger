@@ -1,8 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { OssService } from './oss.service.js'
+import { OssService } from './oss.service'
 import moment from 'moment'
-import { ApiSummary } from '@/lib/nestjs-ext.js'
+import { ApiSummary } from '@/lib/nestjs-ext'
 
 @Controller('oss')
 @ApiTags('OSS 接口')

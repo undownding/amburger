@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import argon2 from 'argon2'
 import { randomBytes } from 'crypto'
 import randomstring from 'randomstring'
-import { User } from '@/user/user.entity.js'
+import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 

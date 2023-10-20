@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
-import { ALI_POP_CORE } from '@/sms/ali/ali.constants.js'
+import { ALI_POP_CORE } from '@/sms/ali/ali.constants'
 import { ConfigService } from '@nestjs/config'
-import { AliSmsService } from '@/sms/ali/ali.sms.service.js'
+import { AliSmsService } from '@/sms/ali/ali.sms.service'
 import RPCClient from '@alicloud/pop-core'
-import { SMS_SERVICE } from '@/sms/sms.constants.js'
+import { SMS_SERVICE } from '@/sms/sms.constants'
 
 @Module({
   providers: [

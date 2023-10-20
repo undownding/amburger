@@ -1,18 +1,18 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
-import type { IToken } from '@/user/auth/auth.decorator.js'
-import { Me, NeedLogin, TryAuth } from '@/user/auth/auth.decorator.js'
-import { User } from '@/user/user.entity.js'
+import type { IToken } from '@/user/auth/auth.decorator'
+import { Me, NeedLogin, TryAuth } from '@/user/auth/auth.decorator'
+import { User } from '@/user/user.entity'
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger'
-import { ApiSummary } from '@/lib/nestjs-ext.js'
-import { UserService } from '@/user/user.service.js'
+import { ApiSummary } from '@/lib/nestjs-ext'
+import { UserService } from '@/user/user.service'
 import {
   UserResetPasswordDto,
   UserSearchDto,
   UserSearchResDto,
   UserUpdateDto,
   UserUpdatePasswordDto,
-} from '@/user/user.dto.js'
-import type { IDType } from '@/lib/base-crud-service.js'
+} from '@/user/user.dto'
+import type { IDType } from '@/lib/base-crud-service'
 import { Like } from 'typeorm'
 
 @Controller('user')

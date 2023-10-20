@@ -4,7 +4,7 @@ import {
   FindOptionsWhere,
   Repository,
 } from 'typeorm'
-import { BaseEntity } from '@/lib/base-entity.js'
+import { BaseEntity } from '@/lib/base-entity'
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { IsInt, IsOptional, Min } from 'class-validator'
 import { BadRequestException } from '@nestjs/common'

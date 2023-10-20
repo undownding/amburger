@@ -1,10 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import { AppModule } from '@/app.module.js'
+import { AppModule } from '@/app.module'
 import { beforeAll, describe, test } from 'vitest'
-import supertest from 'supertest'
-
-const request = supertest
+import request from 'supertest'
 
 describe('AppController (e2e)', () => {
   let app: INestApplication

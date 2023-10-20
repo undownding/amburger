@@ -1,11 +1,11 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common'
-import { ApiSummary } from '@/lib/nestjs-ext.js'
-import { UserService } from '@/user/user.service.js'
-import { User } from '@/user/user.entity.js'
-import { Paged, PagedDto } from '@/lib/base-crud-service.js'
-import { Roles, RolesGuard } from '@/user/role/role.guard.js'
+import { ApiSummary } from '@/lib/nestjs-ext'
+import { UserService } from '@/user/user.service'
+import { User } from '@/user/user.entity'
+import { Paged, PagedDto } from '@/lib/base-crud-service'
+import { Roles, RolesGuard } from '@/user/role/role.guard'
 import { ApiTags } from '@nestjs/swagger'
-import { NeedLogin } from '@/user/auth/auth.decorator.js'
+import { NeedLogin } from '@/user/auth/auth.decorator'
 
 @NeedLogin()
 @Controller('admin')

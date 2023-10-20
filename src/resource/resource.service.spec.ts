@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { ResourceService } from './resource.service.js'
+import { ResourceService } from './resource.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Resource } from '@/resource/resource.entity.js'
-import { typeOrmModuleOptions } from '@/lib/data-source.js'
+import { Resource } from '@/resource/resource.entity'
+import { typeOrmModuleOptions } from '@/lib/data-source'
 import { ConfigModule } from '@nestjs/config'
-import { UserModule } from '@/user/user.module.js'
+import { UserModule } from '@/user/user.module'
 import { CacheModule } from '@nestjs/cache-manager'
-import { AssignerModule } from '@/resource/assigner/assigner.module.js'
+import { AssignerModule } from '@/resource/assigner/assigner.module'
 import { beforeEach, describe, expect, test } from 'vitest'
 
 describe('ResourceService', () => {

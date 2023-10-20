@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { BaseCrudService } from '@/lib/base-crud-service.js'
-import { Role } from '@/user/role/role.entity.js'
+import { BaseCrudService } from '@/lib/base-crud-service'
+import { Role } from '@/user/role/role.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 

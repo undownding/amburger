@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiSummary } from '@/lib/nestjs-ext.js'
+import { ApiSummary } from '@/lib/nestjs-ext'
 import { ApiTags } from '@nestjs/swagger'
-import { AppService } from '@/app.service.js'
+import { AppService } from '@/app.service'
 
 @ApiTags('其他')
 @Controller()

@@ -4,22 +4,22 @@ import {
   AuthRespDto,
   AuthSignUpDto,
   TokenRespDto,
-} from '@/user/auth/auth.dto.js'
-import type { IToken } from '@/user/auth/auth.decorator.js'
+} from '@/user/auth/auth.dto'
+import type { IToken } from '@/user/auth/auth.decorator'
 import {
   Me,
   NeedRefreshToken,
   Token,
   TryAuth,
-} from '@/user/auth/auth.decorator.js'
-import { User } from '@/user/user.entity.js'
+} from '@/user/auth/auth.decorator'
+import { User } from '@/user/user.entity'
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
-import { AuthService } from '@/user/auth/auth.service.js'
+import { AuthService } from '@/user/auth/auth.service'
 import type { Response } from 'express'
-import { ApiSummary } from '@/lib/nestjs-ext.js'
+import { ApiSummary } from '@/lib/nestjs-ext'
 import Bluebird from 'bluebird'
 import moment from 'moment'
-import { UserService } from '@/user/user.service.js'
+import { UserService } from '@/user/user.service'
 
 @Controller('auth')
 @ApiTags('登录相关接口')

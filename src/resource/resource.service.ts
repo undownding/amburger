@@ -4,19 +4,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import { BaseCrudService, IDType } from '@/lib/base-crud-service.js'
-import { Resource } from './resource.entity.js'
+import { BaseCrudService, IDType } from '@/lib/base-crud-service'
+import { Resource } from './resource.entity'
 import { Brackets, In, Repository } from 'typeorm'
-import { UserService } from '@/user/user.service.js'
+import { UserService } from '@/user/user.service'
 import {
   ResourceSearchQuery,
   ResourceSearchResDto,
   ResourceUpdateDto,
-} from '@/resource/resource.dto.js'
-import { Permissions } from './assigner/permission.enum.js'
+} from '@/resource/resource.dto'
+import { Permissions } from './assigner/permission.enum'
 import { InjectRepository } from '@nestjs/typeorm'
-import { AssignerService } from '@/resource/assigner/assigner.service.js'
-import { Assigner } from '@/resource/assigner/assigner.enitity.js'
+import { AssignerService } from '@/resource/assigner/assigner.service'
+import { Assigner } from '@/resource/assigner/assigner.enitity'
 
 @Injectable()
 export class ResourceService extends BaseCrudService<Resource> {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { User } from '@/user/user.entity.js'
+import { User } from '@/user/user.entity'
 import { Repository } from 'typeorm'
 import argon2 from 'argon2'
 import { JwtService } from '@nestjs/jwt'
 import { nanoid } from 'nanoid'
-import { IToken, TokenType } from '@/user/auth/auth.decorator.js'
-import type { IDType } from '@/lib/base-crud-service.js'
+import { IToken, TokenType } from '@/user/auth/auth.decorator'
+import type { IDType } from '@/lib/base-crud-service'
 import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()

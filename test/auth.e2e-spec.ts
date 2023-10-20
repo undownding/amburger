@@ -1,20 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import supertest from 'supertest'
-import { AppModule } from '@/app.module.js'
+import request from 'supertest'
+import { AppModule } from '@/app.module'
 import { faker } from '@faker-js/faker'
-import { SmsProxyService } from '@/sms/sms-proxy.service.js'
+import { SmsProxyService } from '@/sms/sms-proxy.service'
 import { beforeAll, describe, expect, test } from 'vitest'
-
-const request = supertest
 
 describe('Auth (e2e)', () => {
   let app: INestApplication
   let smsService: SmsProxyService
   const username = faker.internet.userName()
   const email = faker.internet.email()
-  const phone = faker.random
-    .numeric(11, { allowLeadingZeros: false })
+  const phone = faker.string
+    .numeric({ length: 11, allowLeadingZeros: false })
     .toString()
   const password = faker.internet.password()
 

@@ -4,10 +4,10 @@ import {
   OmitType,
   PartialType,
 } from '@nestjs/swagger'
-import { User } from '@/user/user.entity.js'
+import { User } from '@/user/user.entity'
 import { IsOptional, IsString } from 'class-validator'
-import { AuthBodyDto } from '@/user/auth/auth.dto.js'
-import { Paged, PagedDto } from '@/lib/base-crud-service.js'
+import { AuthBodyDto } from '@/user/auth/auth.dto'
+import { Paged, PagedDto } from '@/lib/base-crud-service'
 
 export class UserUpdateDto extends PartialType(
   OmitType(User, ['id', 'password', 'salt', 'setId']),

@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { ApiProperty } from '@nestjs/swagger'
-import { User } from '@/user/user.entity.js'
-import { Resource } from '../resource.entity.js'
-import { Permissions } from './permission.enum.js'
-import { BaseEntity } from '@/lib/base-entity.js'
-import { RESOURCE_NAME } from '@/resource/resource.constant.js'
+import { User } from '@/user/user.entity'
+import { Resource } from '../resource.entity'
+import { Permissions } from './permission.enum'
+import { BaseEntity } from '@/lib/base-entity'
+import { RESOURCE_NAME } from '@/resource/resource.constant'
 
 @Entity({ name: `${RESOURCE_NAME}_assigner`, orderBy: { permission: 'DESC' } })
 export class Assigner extends BaseEntity {
